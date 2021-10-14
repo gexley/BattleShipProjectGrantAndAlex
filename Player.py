@@ -14,14 +14,6 @@ class Player:
         # over write in the HumanPlayer and ComputerPlayer subclasses
         pass
 
-    # This is a useful method to determine if the space is "~" or something else
-    # Send it the grid you want to check, so ship or shot
-    def isPlacementLegal(self , grid, row , col ):
-        if( grid.returnLocation(row,col) == "~"):
-            return True
-        else:
-            return False
-
     def createShipGrid(self):
         self.placeShip( "A", 5 )
         self.placeShip( "B", 4 )
