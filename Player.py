@@ -10,7 +10,7 @@ class Player:
         # over write in the HumanPlayer and ComputerPlayer subclasses
         pass
 
-    def placeShip(self, ship , size ):
+    def placeShip(self, ship , size):
         # over write in the HumanPlayer and ComputerPlayer subclasses
         pass
 
