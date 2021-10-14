@@ -6,6 +6,8 @@ class ComputerPlayer(Player):
     def __init__(self):
         Player.__init__(self)
 
+
+
     def placeShip(self, ship , size):
         badship = True
         while badship: #runs until the ship generated is valid
@@ -30,7 +32,4 @@ class ComputerPlayer(Player):
         if orientation == 1:#if the ship is vertical
             for i in range(size):#runs size amount of times
                 self.gridShips.changeSingleSpace(startRow, startCol + i, ship)
-
-
-
 
