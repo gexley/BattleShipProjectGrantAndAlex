@@ -52,10 +52,7 @@ class ComputerPlayer(Player):
         else:
             print("The CPU missed.")
 
-        if self.hitsA == 5 and self.hitsB == 4 and self.hitsC == 3 and self.hitsS == 3 and self.hitsD == 2:
-            return False
-        else:
-            return True
+        return self.stillHasShips()
 
     def placeShip(self, ship , size):
         badship = True
@@ -85,5 +82,18 @@ class ComputerPlayer(Player):
             self.gridShips.changeRow(startRow, ship, startCol, size)
         if orientation == 1: # if the ship is vertical
             self.gridShips.changeCol(startCol, ship, startRow, size)
+
+    # this method will determine if the Player's ship grid still
+    # has ships or not
+    # If they have no ships left, the other player wins
+    # This method returns true if they still have ships
+    # This method returns false if they don't have ships
+    def stillHasShips(self):
+        # this if-else statement is used to determine whether the game is over (meaning that the player has
+        # no more turns left)
+        if self.hitsA == 5 and self.hitsB == 4 and self.hitsC == 3 and self.hitsS == 3 and self.hitsD == 2:
+            return False
+        else:
+            return True
 
 

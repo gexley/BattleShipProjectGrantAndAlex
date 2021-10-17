@@ -28,3 +28,12 @@ class Player:
         self.gridShips.printGrid()
         print("Shot Grid")
         self.gridShots.printGrid()
+
+    # this method will determine if the Player's ship grid still
+    # has ships or not
+    # If they have no ships left, the other player wins
+    # This method returns true if they still have ships
+    # This method returns false if they don't have ships
+    def stillHasShips(self):
+        pass
+

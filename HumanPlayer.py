@@ -75,12 +75,7 @@ class HumanPlayer(Player):
         else:
             print("You already fired there.")
 
-        # this if-else statement is used to determine whether the game is over (meaning that the player has
-        # no more turns left)
-        if self.hitsA == 5 and self.hitsB == 4 and self.hitsC == 3 and self.hitsS == 3 and self.hitsD == 2:
-            return False
-        else:
-            return True
+        return self.stillHasShips()
 
     def placeShip(self, ship , size):
         orientation = input("Do you want the ship to be vertical or horizontal? 0 for vertical, 1 for horizontal: ")
@@ -126,6 +121,19 @@ class HumanPlayer(Player):
             self.gridShips.changeRow(row, ship, startCol, size)
 
         self.gridShips.printGrid()
+
+    # this method will determine if the Player's ship grid still
+    # has ships or not
+    # If they have no ships left, the other player wins
+    # This method returns true if they still have ships
+    # This method returns false if they don't have ships
+    def stillHasShips(self):
+        # this if-else statement is used to determine whether the game is over (meaning that the player has
+        # no more turns left)
+        if self.hitsA == 5 and self.hitsB == 4 and self.hitsC == 3 and self.hitsS == 3 and self.hitsD == 2:
+            return False
+        else:
+            return True
 
 
 
