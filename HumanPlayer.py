@@ -16,16 +16,20 @@ class HumanPlayer(Player):
 
         fireRow = int(input("Enter the row where you would like to shoot: "))
 
+        # runs while fireRow is out of the range of valid rows in gridShots
         while fireRow < 0 or fireRow > 9:
             print("Invalid row")
             fireRow = int(input("Enter the row where you would like to shoot: "))
 
         fireCol = int(input("Enter the column where you would like to shoot: "))
 
+        # runs while fireCol is out of the range of valid columns in gridShots
         while fireCol < 0 or fireCol > 9:
             print("Invalid column")
             fireCol = int(input("Enter the column where you would like to shoot: "))
 
+        # this if-elif-else statement handles which type of ship was hit, as well as if the player missed
+        # or already fired at a specific location
         if otherPlayer.gridShips.returnLocation(fireRow, fireCol) == "A":
             print("You hit a ship!")
             self.gridShots.changeSingleSpace(fireRow, fireCol, "X")
@@ -71,42 +75,50 @@ class HumanPlayer(Player):
         else:
             print("You already fired there.")
 
+        # this if-else statement is used to determine whether the game is over (meaning that the player has
+        # no more turns left)
         if self.hitsA == 5 and self.hitsB == 4 and self.hitsC == 3 and self.hitsS == 3 and self.hitsD == 2:
             return False
         else:
             return True
 
     def placeShip(self, ship , size):
-        orientation = input("Do you want the ship to be horizontal or vertical? 0 for vertical, 1 for horizontal: ")
+        orientation = input("Do you want the ship to be vertical or horizontal? 0 for vertical, 1 for horizontal: ")
 
+        # runs while orientation is an invalid input
         while orientation != "0" or orientation != "1":
+            print("Invalid input.")
             orientation = input(
-                "Do you want the ship to be horizontal or vertical? 0 for vertical, 1 for horizontal: ")
+                "Do you want the ship to be vertical or horizontal? 0 for vertical, 1 for horizontal: ")
 
+        # this if-elif statement handles whether the orientation is 0 or 1 (vertical or horizontal)
         if orientation == "0":
             startRow = int(input("Please enter the first row of your ship: "))
 
+            # runs while the value for startRow is an illegal location
             while startRow < 0 or startRow > 9 or startRow + size - 1 > 9:
                 print("Invalid row.")
                 startRow = int(input("Please enter the first row of your ship: "))
 
             col = int(input("Please enter the column of your ship: "))
 
+            # runs while the value for the column of the ship is illegal
             while col < 0 or col > 9:
                 print("Invalid column.")
                 col = int(input("Please enter the column of your ship: "))
 
             self.gridShips.changeCol(col, ship, startRow, size)
-
         elif orientation == "1":
             startCol = int(input("Please enter the first column of your ship: "))
 
+            # runs while the value for startCol is an illegal location
             while startCol < 0 or startCol > 9 or startCol + size - 1 > 9:
                 print("Invalid column.")
                 startCol = int(input("Please enter the first column of your ship: "))
 
             row = int(input("Please enter the row of your ship: "))
 
+            # runs while the value for the row of the ship is illegal
             while row < 0 or row > 9:
                 print("Invalid row.")
                 row = int(input("Please enter the row of your ship: "))
