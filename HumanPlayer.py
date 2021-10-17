@@ -1,5 +1,5 @@
-from Grid import Grid
 from Player import Player
+
 
 class HumanPlayer(Player):
 
