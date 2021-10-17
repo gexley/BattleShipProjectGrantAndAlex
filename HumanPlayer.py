@@ -12,6 +12,10 @@ class HumanPlayer(Player):
         self.hitsS = 0
 
     def takeTurn(self, otherPlayer):
+
+        if self.stillHasShips() == False:
+            return False
+
         self.gridShots.printGrid()
 
         fireRow = int(input("Enter the row where you would like to shoot: "))
@@ -33,49 +37,56 @@ class HumanPlayer(Player):
         if otherPlayer.gridShips.returnLocation(fireRow, fireCol) == "A":
             print("You hit a ship!")
             self.gridShots.changeSingleSpace(fireRow, fireCol, "X")
-            self.hitsA += 1
-            if self.hitsA == 5:
+            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
+            otherPlayer.hitsA += 1
+            if otherPlayer.hitsA == 5:
                 print("You sunk the CPU's Aircraft Carrier!")
 
             self.gridShots.printGrid()
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == "B":
             print("You hit a ship!")
             self.gridShots.changeSingleSpace(fireRow, fireCol, "X")
-            self.hitsB += 1
-            if self.hitsB == 4:
+            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
+            otherPlayer.hitsB += 1
+            if otherPlayer.hitsB == 4:
                 print("You sunk the CPU's Battleship!")
 
             self.gridShots.printGrid()
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == "C":
             print("You hit a ship!")
             self.gridShots.changeSingleSpace(fireRow, fireCol, "X")
-            self.hitsC += 1
-            if self.hitsC == 3:
+            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
+            otherPlayer.hitsC += 1
+            if otherPlayer.hitsC == 3:
                 print("You sunk the CPU's Cruiser!")
 
             self.gridShots.printGrid()
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == "D":
             print("You hit a ship!")
             self.gridShots.changeSingleSpace(fireRow, fireCol, "X")
-            self.hitsD += 1
-            if self.hitsD == 2:
+            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
+            otherPlayer.hitsD += 1
+            if otherPlayer.hitsD == 2:
                 print("You sunk the CPU's Destroyer!")
 
             self.gridShots.printGrid()
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == "S":
             print("You hit a ship!")
             self.gridShots.changeSingleSpace(fireRow, fireCol, "X")
-            self.hitsS += 1
-            if self.hitsS == 3:
+            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
+            otherPlayer.hitsS += 1
+            if otherPlayer.hitsS == 3:
                 print("You sunk the CPU's Submarine!")
 
             self.gridShots.printGrid()
         elif otherPlayer.gridShips.isSpaceWater(fireRow, fireCol):
             print("You missed. That sucks!")
+            self.gridShots.changeSingleSpace(fireRow, fireCol, "O")
+            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "O")
         else:
             print("You already fired there.")
 
-        return self.stillHasShips()
+        return otherPlayer.stillHasShips()
 
     def placeShip(self, ship , size):
         orientation = input("Do you want the ship to be vertical or horizontal? 0 for vertical, 1 for horizontal: ")

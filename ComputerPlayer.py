@@ -13,6 +13,10 @@ class ComputerPlayer(Player):
         self.hitsD = 0
 
     def takeTurn(self, otherPlayer):
+
+        if self.stillHasShips() == False:
+            return False
+
         while True:
             fireRow = random.randint(0, 9)
             fireCol = random.randint(0, 9)
@@ -52,7 +56,7 @@ class ComputerPlayer(Player):
         else:
             print("The CPU missed.")
 
-        return self.stillHasShips()
+        return otherPlayer.stillHasShips()
 
     def placeShip(self, ship , size):
         badship = True
