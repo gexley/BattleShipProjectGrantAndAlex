@@ -3,7 +3,7 @@ from Player import Player
 
 class HumanPlayer(Player):
 
-    def __init__(self, t):
+    def __init__(self):
         Player.__init__(self)
         self.hitsA = 0
         self.hitsB = 0
@@ -89,16 +89,16 @@ class HumanPlayer(Player):
         return otherPlayer.stillHasShips()
 
     def placeShip(self, ship , size):
-        orientation = input("Do you want the ship to be vertical or horizontal? 0 for vertical, 1 for horizontal: ")
+        orientation = int(input("Do you want the ship to be vertical or horizontal? 0 for vertical, 1 for horizontal: "))
 
         # runs while orientation is an invalid input
-        while orientation != "0" or orientation != "1":
+        while orientation != 0 and orientation != 1:
             print("Invalid input.")
             orientation = input(
                 "Do you want the ship to be vertical or horizontal? 0 for vertical, 1 for horizontal: ")
 
         # this if-elif statement handles whether the orientation is 0 or 1 (vertical or horizontal)
-        if orientation == "0":
+        if orientation == 0:
             startRow = int(input("Please enter the first row of your ship: "))
 
             # runs while the value for startRow is an illegal location
@@ -114,7 +114,7 @@ class HumanPlayer(Player):
                 col = int(input("Please enter the column of your ship: "))
 
             self.gridShips.changeCol(col, ship, startRow, size)
-        elif orientation == "1":
+        elif orientation == 1:
             startCol = int(input("Please enter the first column of your ship: "))
 
             # runs while the value for startCol is an illegal location
