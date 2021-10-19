@@ -14,57 +14,50 @@ class ComputerPlayer(Player):
 
     def takeTurn(self, otherPlayer):
 
-        if self.stillHasShips() == False:
-            return False
-
-        while True:
+        while True:#runs until break
             fireRow = random.randint(0, 9)
             fireCol = random.randint(0, 9)
-            if self.gridShots.isSpaceWater(fireRow, fireCol):
+            if self.gridShots.isSpaceWater(fireRow, fireCol): #if the space hasn't been fired at before
                 break
 
-        if otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'A':
-            print("The CPU hit your ship!")
+        if otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'A':#if shot hits the A ship
+            print("The CPU hit your Aircraft Carrier!")
             self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
-            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, 'X')
-            otherPlayer.gridShips.printGrid()
-            self.hitsA += 1
-            if self.hitsA == 5:
+            otherPlayer.hitsA += 1
+            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
+            if otherPlayer.hitsA == 5:#if the cpu has hit the ship 5 times
                 print("The CPU sunk your Aircraft Carrier!")
-        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'B':
-            print("The CPU hit your ship!")
+        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'B':#if shot hits the B ship
+            print("The CPU hit your Battleship!")
             self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
-            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, 'X')
-            otherPlayer.gridShips.printGrid()
-            self.hitsB += 1
-            if self.hitsB == 4:
+            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
+            otherPlayer.hitsB += 1
+            if otherPlayer.hitsB == 4:#if the cpu has hit the ship 4 times
                 print("The CPU sunk your Battleship!")
-        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'C':
-            print("The CPU hit your ship!")
+        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'C':#if shot hits the C ship
+            print("The CPU hit your Cruiser!")
             self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
-            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, 'X')
-            otherPlayer.gridShips.printGrid()
-            self.hitsC += 1
-            if self.hitsC == 3:
+            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
+            otherPlayer.hitsC += 1
+            if otherPlayer.hitsC == 3:#if the cpu has hit the ship 3 times
                 print("The CPU sunk your Cruiser!")
-        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'S':
-            print("The CPU hit your ship!")
+        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'S':#if shot hits the S ship
+            print("The CPU hit your Submarine!")
             self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
-            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, 'X')
-            otherPlayer.gridShips.printGrid()
-            self.hitsS += 1
-            if self.hitsS == 3:
+            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
+            otherPlayer.hitsS += 1
+            if otherPlayer.hitsS == 3:#if the cpu has hit the ship 3 times
                 print("The CPU sunk your Submarine!")
-        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'D':
-            print("The CPU hit your ship!")
+        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'D':#if shot hits the D ship
+            print("The CPU hit your Destroyer!")
             self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
-            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, 'X')
-            otherPlayer.gridShips.printGrid()
-            self.hitsD += 1
-            if self.hitsD == 2:
+            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
+            otherPlayer.hitsD += 1
+            if otherPlayer.hitsD == 2:#if the cpu has hit the ship 2 times
                 print("The CPU sunk your Destroyer!")
         else:
-            print("The CPU missed.")
+            print("The CPU missed.")#if shot misses
+            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "O")
 
         return otherPlayer.stillHasShips()
 

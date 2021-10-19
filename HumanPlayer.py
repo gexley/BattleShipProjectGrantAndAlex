@@ -17,8 +17,8 @@ class HumanPlayer(Player):
 
         already_hit = ["X", "O"]
         location = "O"
-        fireRow = 0
-        fireCol = 0
+        fireRow = "0"
+        fireCol = "0"
         count = 0
         validRowsAndCols = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
