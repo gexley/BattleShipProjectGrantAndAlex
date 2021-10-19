@@ -12,9 +12,14 @@ class Game:
         self.human.createShipGrid()
 
         while True:
-            if not human.takeTurn():
+            if not self.human.takeTurn(self.cpu):
+                humanWon = True
                 break
-            if not cpu.takeTurn():
+            if not self.cpu.takeTurn(self.human):
+                humanWon = False
                 break
-
+        if humanWon:
+            print("Congradulations!!!!! You Won!!!!!!!!!!")
+        else:
+            print("WOW! You are unbelievably bad at this game")
 
