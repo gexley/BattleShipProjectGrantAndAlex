@@ -12,10 +12,7 @@ class HumanPlayer(Player):
         self.hitsS = 0
 
     def takeTurn(self, otherPlayer):
-        # immediately returns False if the HumanPlayer has no ships left (meaning they cannot take another turn)
-        if self.stillHasShips() == False:
-            return False
-
+        print("SHOT GRID")
         self.gridShots.printGrid()
 
         already_hit = ["X", "O"]
@@ -23,25 +20,27 @@ class HumanPlayer(Player):
         fireRow = 0
         fireCol = 0
         count = 0
+        validRowsAndCols = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+
         # runs while the player already fired (more than once) at the location they chose
         while location in already_hit:
             # runs every time after the first iteration of the while-loop
             if count > 0:
                 print("You already fired there. Choose a new spot!")
 
-            fireRow = int(input("Enter the row where you would like to shoot: "))
+            fireRow = input("Enter the row where you would like to shoot: ")
             # runs while fireRow is out of the range of valid rows in gridShots
-            while fireRow < 0 or fireRow > 9:
+            while fireRow not in validRowsAndCols:
                 print("Invalid row")
-                fireRow = int(input("Enter the row where you would like to shoot: "))
+                fireRow = input("Enter the row where you would like to shoot: ")
 
-            fireCol = int(input("Enter the column where you would like to shoot: "))
+            fireCol = input("Enter the column where you would like to shoot: ")
             # runs while fireCol is out of the range of valid columns in gridShots
-            while fireCol < 0 or fireCol > 9:
+            while fireCol not in validRowsAndCols:
                 print("Invalid column")
-                fireCol = int(input("Enter the column where you would like to shoot: "))
+                fireCol = input("Enter the column where you would like to shoot: ")
 
-            location = otherPlayer.gridShips.returnLocation(fireRow, fireCol)
+            location = otherPlayer.gridShips.returnLocation(int(fireRow), int(fireCol))
 
 
         ships = ["A", "B", "C", "D", "S"]
@@ -49,13 +48,14 @@ class HumanPlayer(Player):
         # used to determine whether a ship was hit or if the player missed
         if location in ships:
             print("You hit a ship!")
-            self.gridShots.changeSingleSpace(fireRow, fireCol, "X")
-            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
+            self.gridShots.changeSingleSpace(int(fireRow), int(fireCol), "X")
+            otherPlayer.gridShips.changeSingleSpace(int(fireRow), int(fireCol), "X")
+            print("SHOT GRID")
             self.gridShots.printGrid()
-        elif otherPlayer.gridShips.isSpaceWater(fireRow, fireCol):
+        elif otherPlayer.gridShips.isSpaceWater(int(fireRow), int(fireCol)):
             print("You missed. That sucks!")
-            self.gridShots.changeSingleSpace(fireRow, fireCol, "O")
-            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "O")
+            self.gridShots.changeSingleSpace(int(fireRow), int(fireCol), "O")
+            otherPlayer.gridShips.changeSingleSpace(int(fireRow), int(fireCol), "O")
 
         # this if-elif-else statement handles which type of ship was hit, as well as if the player missed
         # or fired at a single location more than once
@@ -90,29 +90,30 @@ class HumanPlayer(Player):
                       "S": "Submarine"
         }
 
-        orientation = int(input("Do you want your " + ship_dict[ship] +
-                                " to be vertical or horizontal? 0 for vertical, 1 for horizontal: "))
+        orientation = input("Do you want your " + ship_dict[ship] +
+                                " to be vertical or horizontal? 0 for vertical, 1 for horizontal: ")
 
-        valid_inputs = [0, 1]
+        valid_orientations = ["0", "1"]
+        validRowsAndCols = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
 
         # runs while orientation is an invalid input
-        while orientation not in valid_inputs:
+        while orientation not in valid_orientations:
             print("Invalid input.")
-            orientation = int(input(
-                "Do you want the ship to be vertical or horizontal? 0 for vertical, 1 for horizontal: "))
+            orientation = input(
+                "Do you want the ship to be vertical or horizontal? 0 for vertical, 1 for horizontal: ")
 
         valid = False
 
         # this if-elif statement handles whether the orientation is 0 or 1 (vertical or horizontal)
-        if orientation == 0:
-            startRow = int(input("Please enter the first row of your ship: "))
+        if orientation == "0":
+            startRow = input("Please enter the first row of your ship: ")
 
             # runs while the value for startRow is an illegal location
-            while startRow < 0 or startRow > 9 or startRow + size - 1 > 9:
+            while startRow not in validRowsAndCols and int(startRow) + size - 1 > 9:
                 print("Invalid row.")
-                startRow = int(input("Please enter the first row of your ship: "))
+                startRow = input("Please enter the first row of your ship: ")
 
-            col = int(input("Please enter the column of your ship: "))
+            col = input("Please enter the column of your ship: ")
 
             # used to ensure that ship placement is ultimately valid
             while valid == False:
@@ -120,27 +121,27 @@ class HumanPlayer(Player):
 
                 # used to traverse the Player's ship grid
                 # from row "startRow" to row "startRow + size - 1" in column "col"
-                for i in range(startRow, startRow + size):
+                for i in range(int(startRow), int(startRow) + size):
                     # handles conditions that, if true, result in illegal ship placement
-                    if col < 0 or col > 9:
+                    if col not in validRowsAndCols:
                         valid = False
                         print("Invalid column.")
-                        col = int(input("Please enter the column of your ship: "))
-                    elif self.gridShips.isSpaceWater(i, col) == False:
+                        col = input("Please enter the column of your ship: ")
+                    elif self.gridShips.isSpaceWater(i, int(col)) == False:
                         valid = False
                         print("Invalid column.")
-                        col = int(input("Please enter the column of your ship: "))
+                        col = input("Please enter the column of your ship: ")
 
-            self.gridShips.changeCol(col, ship, startRow, size)
-        elif orientation == 1:
-            startCol = int(input("Please enter the first column of your ship: "))
+            self.gridShips.changeCol(int(col), ship, int(startRow), size)
+        elif orientation == "1":
+            startCol = input("Please enter the first column of your ship: ")
 
             # runs while the value for startCol is an illegal location
-            while startCol < 0 or startCol > 9 or startCol + size - 1 > 9:
+            while startCol not in validRowsAndCols and int(startCol) + size - 1 > 9:
                 print("Invalid column.")
-                startCol = int(input("Please enter the first column of your ship: "))
+                startCol = input("Please enter the first column of your ship: ")
 
-            row = int(input("Please enter the row of your ship: "))
+            row = input("Please enter the row of your ship: ")
 
             # used to ensure that ship placement is ultimately valid
             while valid == False:
@@ -148,19 +149,19 @@ class HumanPlayer(Player):
 
                 # used to traverse the Player's ship grid
                 # from column "startCol" to column "startCol + size - 1" in row "row"
-                for i in range(startCol, startCol + size):
+                for i in range(int(startCol), int(startCol) + size):
                     # handles conditions that, if true, result in illegal ship placement
-                    if row < 0 or row > 9:
+                    if row not in validRowsAndCols:
                         valid = False
                         print("Invalid row.")
-                        row = int(input("Please enter the row of your ship: "))
-                    elif self.gridShips.isSpaceWater(row, i) == False:
+                        row = input("Please enter the row of your ship: ")
+                    elif self.gridShips.isSpaceWater(int(row), i) == False:
                         valid = False
                         print("Invalid row.")
-                        row = int(input("Please enter the row of your ship: "))
+                        row = input("Please enter the row of your ship: ")
 
-            self.gridShips.changeRow(row, ship, startCol, size)
-
+            self.gridShips.changeRow(int(row), ship, int(startCol), size)
+        print("SHIP GRID")
         self.gridShips.printGrid()
 
     # this method will determine if the Player's ship grid still
@@ -171,7 +172,8 @@ class HumanPlayer(Player):
     def stillHasShips(self):
         # this if-else statement is used to determine whether the game is over (meaning that the player has
         # no more turns left)
-        if self.hitsA == 5 and self.hitsB == 4 and self.hitsC == 3 and self.hitsS == 3 and self.hitsD == 2:
+        if self.hitsA == 5 and self.hitsB == 4 and self.hitsC == 3 and \
+                self.hitsS == 3 and self.hitsD == 2:
             return False
         else:
             return True

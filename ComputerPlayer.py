@@ -26,30 +26,40 @@ class ComputerPlayer(Player):
         if otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'A':
             print("The CPU hit your ship!")
             self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
+            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, 'X')
+            otherPlayer.gridShips.printGrid()
             self.hitsA += 1
             if self.hitsA == 5:
                 print("The CPU sunk your Aircraft Carrier!")
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'B':
             print("The CPU hit your ship!")
             self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
+            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, 'X')
+            otherPlayer.gridShips.printGrid()
             self.hitsB += 1
             if self.hitsB == 4:
                 print("The CPU sunk your Battleship!")
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'C':
             print("The CPU hit your ship!")
             self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
+            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, 'X')
+            otherPlayer.gridShips.printGrid()
             self.hitsC += 1
             if self.hitsC == 3:
                 print("The CPU sunk your Cruiser!")
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'S':
             print("The CPU hit your ship!")
             self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
+            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, 'X')
+            otherPlayer.gridShips.printGrid()
             self.hitsS += 1
             if self.hitsS == 3:
                 print("The CPU sunk your Submarine!")
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'D':
             print("The CPU hit your ship!")
             self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
+            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, 'X')
+            otherPlayer.gridShips.printGrid()
             self.hitsD += 1
             if self.hitsD == 2:
                 print("The CPU sunk your Destroyer!")
