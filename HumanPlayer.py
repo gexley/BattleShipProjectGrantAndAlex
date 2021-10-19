@@ -12,6 +12,13 @@ class HumanPlayer(Player):
         self.hitsS = 0
 
     def takeTurn(self, otherPlayer):
+        """Allows the human player to take a turn
+        (which consists of firing at a location and getting a message if they hit one of the ComputerPlayer's ships).
+
+        :param otherPlayer: a ComputerPlayer Subclass object
+        :return: a boolean that is True if the HumanPlayer object can take another turn, and False if they cannot
+        """
+
         print("SHOT GRID")
         self.gridShots.printGrid()
 
@@ -50,15 +57,20 @@ class HumanPlayer(Player):
             print("You hit a ship!")
             self.gridShots.changeSingleSpace(int(fireRow), int(fireCol), "X")
             otherPlayer.gridShips.changeSingleSpace(int(fireRow), int(fireCol), "X")
-            print("SHOT GRID")
+
+            print(("-" * 40) + "SHOT GRID" + ("-" * 40))
             self.gridShots.printGrid()
         elif otherPlayer.gridShips.isSpaceWater(int(fireRow), int(fireCol)):
             print("You missed. That sucks!")
             self.gridShots.changeSingleSpace(int(fireRow), int(fireCol), "O")
             otherPlayer.gridShips.changeSingleSpace(int(fireRow), int(fireCol), "O")
 
+            print(("-" * 40) + "SHOT GRID" + ("-" * 40))
+            self.gridShots.printGrid()
+
         # this if-elif-else statement handles which type of ship was hit, as well as if the player missed
         # or fired at a single location more than once
+        # the nested if-statements are used to give information about whether a ship was sunk (and what ship was sunk)
         if location == "A":
             otherPlayer.hitsA += 1
             if otherPlayer.hitsA == 5:
@@ -83,6 +95,12 @@ class HumanPlayer(Player):
         return otherPlayer.stillHasShips()
 
     def placeShip(self, ship , size):
+        """This method legally places a ship on the HumanPlayer's ship grid
+
+        :param ship: a single-character string representing the type of ship to be placed
+        :param size: an int representing the size of the ship
+        """
+
         ship_dict = { "A": "Aircraft Carrier",
                       "B": "Battleship",
                       "C": "Cruiser",
@@ -161,15 +179,18 @@ class HumanPlayer(Player):
                         row = input("Please enter the row of your ship: ")
 
             self.gridShips.changeRow(int(row), ship, int(startCol), size)
-        print("SHIP GRID")
+
+        print(("-" * 40) + "SHIP GRID" + ("-" * 40))
         self.gridShips.printGrid()
 
-    # this method will determine if the Player's ship grid still
-    # has ships or not
-    # If they have no ships left, the other player wins
-    # This method returns true if they still have ships
-    # This method returns false if they don't have ships
     def stillHasShips(self):
+        """Determines if the Player's ship grid still has ships or not
+
+        If they have no ships left, the other player wins
+
+        :return: Ture if the HumanPlayer still has ships, False if they do not
+        """
+
         # this if-else statement is used to determine whether the game is over (meaning that the player has
         # no more turns left)
         if self.hitsA == 5 and self.hitsB == 4 and self.hitsC == 3 and \
