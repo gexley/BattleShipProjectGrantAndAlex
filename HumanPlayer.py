@@ -82,7 +82,15 @@ class HumanPlayer(Player):
         return otherPlayer.stillHasShips()
 
     def placeShip(self, ship , size):
-        orientation = int(input("Do you want the ship to be vertical or horizontal? 0 for vertical, 1 for horizontal: "))
+        ship_dict = { "A": "Aircraft Carrier",
+                      "B": "Battleship",
+                      "C": "Cruiser",
+                      "D": "Destroyer",
+                      "S": "Submarine"
+        }
+
+        orientation = int(input("Do you want your " + ship_dict[ship] +
+                                " to be vertical or horizontal? 0 for vertical, 1 for horizontal: "))
 
         valid_inputs = [0, 1]
 
