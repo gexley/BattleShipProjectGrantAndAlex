@@ -79,7 +79,7 @@ class ComputerPlayer(Player):
                 startCol = random.randint(0, 9)
                 startRow = random.randint(0, 10-size)
                 for i in range(size): # runs size amount of times
-                    if not self.gridShips(startCol, startRow + i): # if the placement is not legal
+                    if not self.gridShips.isSpaceWater(startCol, startRow + i): # if the placement is not legal
                         badship = True
 
         if orientation == 0: # if the ship is horizontal

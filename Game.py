@@ -12,9 +12,9 @@ class Game:
         self.human.createShipGrid()
 
         while True:
-            if not human.takeTurn():
+            if not self.human.takeTurn(self.cpu):
                 break
-            if not cpu.takeTurn():
+            if not self.cpu.takeTurn(self.human):
                 break
 
 

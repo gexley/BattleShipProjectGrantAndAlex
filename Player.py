@@ -22,6 +22,7 @@ class Player:
         self.placeShip( "C", 3 )
         self.placeShip( "S", 3 )
         self.placeShip( "D", 2 )
+        print("-" * 80)
 
     def printGrids(self):
         print("Ship Grid")
