@@ -9,7 +9,11 @@ class Game:
 
     def playGame(self):
         self.cpu.createShipGrid()
+        print("CPU SHIP GRID")
+        self.cpu.gridShips.printGrid()
         self.human.createShipGrid()
+
+
 
         while True:
             if self.human.stillHasShips():

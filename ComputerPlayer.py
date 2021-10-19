@@ -21,51 +21,46 @@ class ComputerPlayer(Player):
                 break
 
         if otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'A':#if shot hits the A ship
-            print("The CPU hit your Aircraft Carrier!")
-            self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
-            otherPlayer.hitsA += 1
-            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
-            if otherPlayer.hitsA == 5:#if the cpu has hit the ship 5 times
-                print("The CPU sunk your Aircraft Carrier!")
+            self.shotHit(otherPlayer, fireRow, fireCol, "A")
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'B':#if shot hits the B ship
-            print("The CPU hit your Battleship!")
-            self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
-            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
-            otherPlayer.hitsB += 1
-            if otherPlayer.hitsB == 4:#if the cpu has hit the ship 4 times
-                print("The CPU sunk your Battleship!")
+            self.shotHit(otherPlayer, fireRow, fireCol, "B")
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'C':#if shot hits the C ship
-            print("The CPU hit your Cruiser!")
-            self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
-            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
-            otherPlayer.hitsC += 1
-            if otherPlayer.hitsC == 3:#if the cpu has hit the ship 3 times
-                print("The CPU sunk your Cruiser!")
+            self.shotHit(otherPlayer, fireRow, fireCol, "C")
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'S':#if shot hits the S ship
-            print("The CPU hit your Submarine!")
-            self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
-            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
-            otherPlayer.hitsS += 1
-            if otherPlayer.hitsS == 3:#if the cpu has hit the ship 3 times
-                print("The CPU sunk your Submarine!")
+            self.shotHit(otherPlayer, fireRow, fireCol, "S")
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'D':#if shot hits the D ship
-            print("The CPU hit your Destroyer!")
-            self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
-            otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
-            otherPlayer.hitsD += 1
-            if otherPlayer.hitsD == 2:#if the cpu has hit the ship 2 times
-                print("The CPU sunk your Destroyer!")
-        else:
-            print("The CPU missed.")#if shot misses
+            self.shotHit(otherPlayer, fireRow, fireCol, "D")
+        else:#if shot misses
+            print("The CPU missed.")
             otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "O")
+        print ("SHIP GRID")
+        otherPlayer.gridShips.printGrid()
 
-        return otherPlayer.stillHasShips()
+    def shotHit(self, otherPlayer, fireRow, fireCol, ship):
+        varLib = {
+            "A": otherPlayer.hitsA,
+            "B": otherPlayer.hitsB,
+            "C": otherPlayer.hitsC,
+            "D": otherPlayer.hitsD,
+            "S": otherPlayer.hitsS
+        }
+        nameLib = {
+            "A": "Aircraft Carrier",
+            "B": "Battleship",
+            "C": "Cruiser",
+            "D": "Destroyer",
+            "S": "Submarine"
+        }
+        print("The CPU hit your", nameLib[ship], "!")
+        self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
+        otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
+        varLib[ship] += 1
+        if varLib[ship] == 3:  # if the cpu has hit the ship 3 times
+            print("The CPU sunk your", nameLib[ship], "!")
+
 
     def placeShip(self, ship , size):
         badship = True
-        orientation = random.randint(0, 1)
-        startCol = random.randint(0, 10 - size)
-        startRow = random.randint(0, 9)
 
         while badship: # runs until the ship generated is valid
             badship = False
@@ -76,13 +71,13 @@ class ComputerPlayer(Player):
                 startCol = random.randint(0, 10-size)
                 startRow = random.randint(0, 9)
                 for i in range(size): # runs size amount of times
-                    if not self.gridShips.isSpaceWater(startCol + i, startRow): # if the placement is not legal
+                    if not self.gridShips.isSpaceWater(startRow , startCol+i):# if the placement is not legal
                         badship = True
             elif orientation == 1: # if the ship is vertical
                 startCol = random.randint(0, 9)
                 startRow = random.randint(0, 10-size)
                 for i in range(size): # runs size amount of times
-                    if not self.gridShips.isSpaceWater(startCol, startRow + i): # if the placement is not legal
+                    if not self.gridShips.isSpaceWater(startRow + i, startCol):#if the placement is not legal
                         badship = True
 
         if orientation == 0: # if the ship is horizontal
@@ -98,9 +93,9 @@ class ComputerPlayer(Player):
     def stillHasShips(self):
         # this if-else statement is used to determine whether the game is over (meaning that the player has
         # no more turns left)
-        if self.hitsA == 5 and self.hitsB == 4 and self.hitsC == 3 and self.hitsS == 3 and self.hitsD == 2:
+        if self.hitsA == 5 and self.hitsB == 4 and self.hitsC == 3 and self.hitsS == 3 and self.hitsD == 2:#if all the cpus ships have been sunk
             return False
-        else:
+        else:#if the cpu still has ships
             return True
 
 
