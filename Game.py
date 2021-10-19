@@ -13,11 +13,11 @@ class Game:
 
         while True:
             if self.human.stillHasShips():
-                if not self.human.takeTurn(self.cpu):
+                self.human.takeTurn(self.cpu)
             else:
                 humanWon = False
                 break
-            if not self.cpu.stillHasShips():
+            if self.cpu.stillHasShips():
                 self.cpu.takeTurn(self.human)
             else:
                 humanWon = True

@@ -109,7 +109,7 @@ class HumanPlayer(Player):
             startRow = input("Please enter the first row of your ship: ")
 
             # runs while the value for startRow is an illegal location
-            while startRow not in validRowsAndCols and int(startRow) + size - 1 > 9:
+            while startRow not in validRowsAndCols or int(startRow) + size - 1 > 9:
                 print("Invalid row.")
                 startRow = input("Please enter the first row of your ship: ")
 
@@ -137,7 +137,7 @@ class HumanPlayer(Player):
             startCol = input("Please enter the first column of your ship: ")
 
             # runs while the value for startCol is an illegal location
-            while startCol not in validRowsAndCols and int(startCol) + size - 1 > 9:
+            while startCol not in validRowsAndCols or int(startCol) + size - 1 > 9:
                 print("Invalid column.")
                 startCol = input("Please enter the first column of your ship: ")
 
