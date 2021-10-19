@@ -15,7 +15,7 @@ class HumanPlayer(Player):
         # immediately returns False if the HumanPlayer has no ships left (meaning they cannot take another turn)
         if self.stillHasShips() == False:
             return False
-
+        print("SHOT GRID")
         self.gridShots.printGrid()
 
         already_hit = ["X", "O"]
@@ -51,6 +51,7 @@ class HumanPlayer(Player):
             print("You hit a ship!")
             self.gridShots.changeSingleSpace(fireRow, fireCol, "X")
             otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
+            print("SHOT GRID")
             self.gridShots.printGrid()
         elif otherPlayer.gridShips.isSpaceWater(fireRow, fireCol):
             print("You missed. That sucks!")
@@ -160,7 +161,7 @@ class HumanPlayer(Player):
                         row = int(input("Please enter the row of your ship: "))
 
             self.gridShips.changeRow(row, ship, startCol, size)
-
+        print("SHIP GRID")
         self.gridShips.printGrid()
 
     # this method will determine if the Player's ship grid still
