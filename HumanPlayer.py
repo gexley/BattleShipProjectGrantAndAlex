@@ -12,6 +12,7 @@ class HumanPlayer(Player):
         self.hitsS = 0
 
     def takeTurn(self, otherPlayer):
+        # immediately returns False if the HumanPlayer has no ships left (meaning they cannot take another turn)
         if self.stillHasShips() == False:
             return False
 
@@ -113,7 +114,7 @@ class HumanPlayer(Player):
 
             col = int(input("Please enter the column of your ship: "))
 
-            # runs while the value for the column of the ship is illegal
+            # used to ensure that ship placement is ultimately valid
             while valid == False:
                 valid = True
 
