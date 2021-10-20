@@ -27,7 +27,7 @@ class Game:
                 humanWon = True
                 break
         if humanWon:
-            print("Congradulations!!!!! You Won!!!!!!!!!!")
+            print("Congratulations!!!!! You Won!!!!!!!!!!")
         else:
             print("WOW! You are unbelievably bad at this game")
 
