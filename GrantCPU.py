@@ -2,7 +2,7 @@ import random
 from Player import Player
 
 
-class ComputerPlayer(Player):
+class GrantCPU(Player):
 
     def __init__(self):
         Player.__init__(self)
@@ -11,30 +11,36 @@ class ComputerPlayer(Player):
         self.hitsC = 0
         self.hitsS = 0
         self.hitsD = 0
+        self.fireList = []
+        self.searching = True
 
     def takeTurn(self, otherPlayer):
 
-        while True:#runs until break
-            fireRow = random.randint(0, 9)
-            fireCol = random.randint(0, 9)
-            if self.gridShots.isSpaceWater(fireRow, fireCol): #if the space hasn't been fired at before
-                break
+        fireLoc = self.whereToFire()
+        fireRow = fireLoc[0]
+        fireCol = fireLoc[1]
 
         if otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'A':#if shot hits the A ship
+            otherPlayer.hitsA += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "A")
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'B':#if shot hits the B ship
+            otherPlayer.hitsB += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "B")
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'C':#if shot hits the C ship
+            otherPlayer.hitsC += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "C")
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'S':#if shot hits the S ship
+            otherPlayer.hitsS += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "S")
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'D':#if shot hits the D ship
+            otherPlayer.hitsD += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "D")
         else:#if shot misses
-            print("The CPU missed.")
+            print("Grant missed.")
             otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "O")
-            self.gridShots.changeSingleSpace(fireRow, fireCol, 'O')
-        print ("SHIP GRID")
+            self.gridShots.changeSingleSpace(fireRow, fireCol, "O")
+            self.fireList.append((fireRow, fireCol, "O", "O"))
+        print ("Alex's SHIP GRID")
         otherPlayer.gridShips.printGrid()
 
     def shotHit(self, otherPlayer, fireRow, fireCol, ship):
@@ -59,12 +65,32 @@ class ComputerPlayer(Player):
             "D": 2,
             "S": 3
         }
-        print("The CPU hit your", nameLib[ship], "!")
+        print("Grant hit Alex's ship!")
         self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
         otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
-        varLib[ship] += 1
         if varLib[ship] == sizeLib[ship]:  # if the cpu has hit the ship 3 times
-            print("The CPU sunk your", nameLib[ship], "!")
+            print("Grant sunk Alex's", nameLib[ship], "!")
+            self.fireList.append((fireRow, fireCol, "X", ship))
+            self.searching = True
+        else:
+            self.fireList.append((fireRow, fireCol, "X", "O"))
+            self.searching = False
+
+    def whereToFire(self):
+        if self.searching:
+            while True:
+                fireRow = random.randint(0,9)
+                fireCol = random.randint(0,9)
+                if self.gridShots.isSpaceWater(fireRow, fireCol) and (fireRow + fireCol) % 2 == 0:
+                    return (fireRow, fireCol)
+        else:
+            for i in reversed(self.fireList):
+                if i[2] == "X":
+                    possibleShots = [(i[0]+1,i[1]),(i[0]-1,i[1]),(i[0],i[1]+1),(i[0],i[1]-1)]
+                    for a in possibleShots:
+                        if (a[0] >= 0 and a[0] < 10) and (a[1] >= 0 and a[1] < 10) and self.gridShots.isSpaceWater(a[0], a[1]):
+                            return (a[0], a[1])
+
 
 
     def placeShip(self, ship , size):
