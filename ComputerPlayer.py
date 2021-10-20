@@ -21,14 +21,19 @@ class ComputerPlayer(Player):
                 break
 
         if otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'A':#if shot hits the A ship
+            otherPlayer.hitsA += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "A")
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'B':#if shot hits the B ship
+            otherPlayer.hitsB += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "B")
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'C':#if shot hits the C ship
+            otherPlayer.hitsC += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "C")
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'S':#if shot hits the S ship
+            otherPlayer.hitsS += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "S")
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'D':#if shot hits the D ship
+            otherPlayer.hitsD += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "D")
         else:#if shot misses
             print("The CPU missed.")
@@ -62,8 +67,7 @@ class ComputerPlayer(Player):
         print("The CPU hit your", nameLib[ship], "!")
         self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
         otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
-        varLib[ship] += 1
-        if varLib[ship] == sizeLib[ship]:  # if the cpu has hit the ship 3 times
+        if varLib[ship] == sizeLib[ship]:  # if the cpu has hit the ship enough to sink it
             print("The CPU sunk your", nameLib[ship], "!")
 
 

@@ -68,7 +68,7 @@ class GrantCPU(Player):
         print("Grant hit Alex's ship!")
         self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
         otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
-        if varLib[ship] == sizeLib[ship]:  # if the cpu has hit the ship 3 times
+        if varLib[ship] == sizeLib[ship]:  # if the cpu has hit the ship enough to sink it
             print("Grant sunk Alex's", nameLib[ship], "!")
             self.fireList.append((fireRow, fireCol, "X", ship))
             self.searching = True
