@@ -9,7 +9,7 @@ class Game:
 
     def playGame(self):
         self.cpu.createShipGrid()
-        # we print the CPU ship grid here so we can cheat
+        #here so we can cheat vs cpu
         print("CPU SHIP GRID")
         self.cpu.gridShips.printGrid()
         self.human.createShipGrid()
@@ -20,15 +20,15 @@ class Game:
             else: # if the human doesnt have ships
                 humanWon = False
                 break
+
             if self.cpu.stillHasShips(): # if the cpu still has ships
                 self.cpu.takeTurn(self.human)
-            else: # if the cpu doesn't have ships
+            else: # if the cpu doesnt have ships
                 humanWon = True
                 break
-        if humanWon: # if human won
-            print("Congratulations, you won!!!")
-        else: # if cpu won
+
+        if humanWon: # if the human won
+            print("Congratulations!!!!! You Won!!!!!!!!!!")
+        else: # if the cpu won
             print("WOW! You are unbelievably bad at this game.")
-
-
 
