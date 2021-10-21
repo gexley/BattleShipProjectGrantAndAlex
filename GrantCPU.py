@@ -15,7 +15,7 @@ class GrantCPU(Player):
         self.searching = True
 
     def takeTurn(self, otherPlayer):
-
+        #self.stillSearching()
         fireLoc = self.whereToFire()
         fireRow = fireLoc[0]
         fireCol = fireLoc[1]
@@ -91,7 +91,11 @@ class GrantCPU(Player):
                         if (a[0] >= 0 and a[0] < 10) and (a[1] >= 0 and a[1] < 10) and self.gridShots.isSpaceWater(a[0], a[1]):
                             return (a[0], a[1])
 
-
+    def stillSearching(self):
+        for i in self.fireList:
+            if i[2] == "X":
+                return False
+        return True
 
     def placeShip(self, ship , size):
         badship = True
@@ -133,3 +137,4 @@ class GrantCPU(Player):
             return True
 
 
+=
