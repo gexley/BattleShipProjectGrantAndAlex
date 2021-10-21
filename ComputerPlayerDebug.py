@@ -1,7 +1,6 @@
-from ComputerPlayer import ComputerPlayer
-from Game import Game
+from GrantCPUGameTest import GrantCPUGameTest
 
-c = ComputerPlayer()
-c.createShipGrid()
-c.printGrids()
+g = GrantCPUGameTest()
+
+g.playGame()
 
