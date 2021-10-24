@@ -19,7 +19,7 @@ class HumanPlayer(Player):
         :return: a boolean that is True if the HumanPlayer object can take another turn, and False if they cannot
         """
 
-        print("SHOT GRID")
+        print(("-" * 40) + "SHOT GRID" + ("-" * 40))
         self.gridShots.printGrid()
 
         already_hit = ["X", "O"]
@@ -54,6 +54,7 @@ class HumanPlayer(Player):
 
         # used to determine whether a ship was hit or if the player missed
         if location in ships:
+            print("\n\n\n")
             print("You hit a ship!")
             self.gridShots.changeSingleSpace(int(fireRow), int(fireCol), "X")
             otherPlayer.gridShips.changeSingleSpace(int(fireRow), int(fireCol), "X")
@@ -61,6 +62,7 @@ class HumanPlayer(Player):
             print(("-" * 40) + "SHOT GRID" + ("-" * 40))
             self.gridShots.printGrid()
         elif otherPlayer.gridShips.isSpaceWater(int(fireRow), int(fireCol)):
+            print("\n\n\n")
             print("You missed. That sucks!")
             self.gridShots.changeSingleSpace(int(fireRow), int(fireCol), "O")
             otherPlayer.gridShips.changeSingleSpace(int(fireRow), int(fireCol), "O")
@@ -107,6 +109,12 @@ class HumanPlayer(Player):
                       "D": "Destroyer",
                       "S": "Submarine"
         }
+
+        # prints the blank grid (only runs the first time placeShip() is called)
+        if ship == "A":
+            print("\n\n\n")
+            print(("-" * 40) + "YOUR SHIP GRID" + ("-" * 40))
+            self.gridShips.printGrid()
 
         orientation = input("Do you want your " + ship_dict[ship] +
                                 " to be vertical or horizontal? 0 for vertical, 1 for horizontal: ")

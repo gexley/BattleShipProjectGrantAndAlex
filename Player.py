@@ -22,12 +22,12 @@ class Player:
         self.placeShip( "C", 3 )
         self.placeShip( "S", 3 )
         self.placeShip( "D", 2 )
-        print("-" * 80)
 
     def printGrids(self):
-        print("Ship Grid")
+        print(("-" * 40) + "SHIP GRID" + ("-" * 40))
         self.gridShips.printGrid()
-        print("Shot Grid")
+        print("\n\n\n")
+        print(("-" * 40) + "SHOT GRID" + ("-" * 40))
         self.gridShots.printGrid()
 
     # this method will determine if the Player's ship grid still
