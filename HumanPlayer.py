@@ -19,7 +19,7 @@ class HumanPlayer(Player):
         :return: a boolean that is True if the HumanPlayer object can take another turn, and False if they cannot
         """
 
-        print(("-" * 40) + "SHOT GRID" + ("-" * 40))
+        print(("-" * 40) + "YOUR SHOT GRID" + ("-" * 40))
         self.gridShots.printGrid()
 
         already_hit = ["X", "O"]
@@ -59,7 +59,7 @@ class HumanPlayer(Player):
             self.gridShots.changeSingleSpace(int(fireRow), int(fireCol), "X")
             otherPlayer.gridShips.changeSingleSpace(int(fireRow), int(fireCol), "X")
 
-            print(("-" * 40) + "SHOT GRID" + ("-" * 40))
+            print(("-" * 40) + "YOUR SHOT GRID" + ("-" * 40))
             self.gridShots.printGrid()
         elif otherPlayer.gridShips.isSpaceWater(int(fireRow), int(fireCol)):
             print("\n\n\n")
@@ -67,7 +67,7 @@ class HumanPlayer(Player):
             self.gridShots.changeSingleSpace(int(fireRow), int(fireCol), "O")
             otherPlayer.gridShips.changeSingleSpace(int(fireRow), int(fireCol), "O")
 
-            print(("-" * 40) + "SHOT GRID" + ("-" * 40))
+            print(("-" * 40) + "YOUR SHOT GRID" + ("-" * 40))
             self.gridShots.printGrid()
 
         # this if-elif-else statement handles which type of ship was hit, as well as if the player missed
@@ -188,7 +188,7 @@ class HumanPlayer(Player):
 
             self.gridShips.changeRow(int(row), ship, int(startCol), size)
 
-        print(("-" * 40) + "SHIP GRID" + ("-" * 40))
+        print(("-" * 40) + "YOUR SHIP GRID" + ("-" * 40))
         self.gridShips.printGrid()
 
     def stillHasShips(self):

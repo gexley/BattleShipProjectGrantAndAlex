@@ -40,7 +40,7 @@ class ComputerPlayer(Player):
             print("The CPU missed.")
             otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "O")
             self.gridShots.changeSingleSpace(fireRow, fireCol, 'O')
-        print (("-" * 40) + "SHIP GRID" + ("-" * 40))
+        print (("-" * 40) + "YOUR SHIP GRID" + ("-" * 40))
         otherPlayer.gridShips.printGrid()
 
     def shotHit(self, otherPlayer, fireRow, fireCol, ship):
