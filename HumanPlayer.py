@@ -38,16 +38,17 @@ class HumanPlayer(Player):
             fireRow = input("Enter the row where you would like to shoot: ")
             # runs while fireRow is out of the range of valid rows in gridShots
             while fireRow not in validRowsAndCols:
-                print("Invalid row")
+                print("Invalid row.")
                 fireRow = input("Enter the row where you would like to shoot: ")
 
             fireCol = input("Enter the column where you would like to shoot: ")
             # runs while fireCol is out of the range of valid columns in gridShots
             while fireCol not in validRowsAndCols:
-                print("Invalid column")
+                print("Invalid column.")
                 fireCol = input("Enter the column where you would like to shoot: ")
 
             location = otherPlayer.gridShips.returnLocation(int(fireRow), int(fireCol))
+            count += 1
 
 
         ships = ["A", "B", "C", "D", "S"]
