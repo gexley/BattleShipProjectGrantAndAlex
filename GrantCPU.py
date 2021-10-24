@@ -88,13 +88,21 @@ class GrantCPU(Player):
                 if i[2] == "X":
                     possibleShots = [(i[0]+1,i[1]),(i[0]-1,i[1]),(i[0],i[1]+1),(i[0],i[1]-1)]
                     for a in possibleShots:
-                        if (a[0] >= 0 and a[0] < 10) and (a[1] >= 0 and a[1] < 10) and self.gridShots.isSpaceWater(a[0], a[1]):
-                            return (a[0], a[1])
+                        if (a[0] >= 0 and a[0] < 10) and (a[1] >= 0 and a[1] < 10):
+
+                            while self.gridShots.returnLocation(a[0], a[1]) == "X":
+                                if (a[0] + 1) >= 0
+
+                                return (a[0], a[1])
 
 
 
     def placeShip(self, ship , size):
         badship = True
+
+        orientation = 0
+        startRow = 0
+        startCol = 0
 
         while badship: # runs until the ship generated is valid
             badship = False
