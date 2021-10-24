@@ -10,7 +10,7 @@ class Game:
     def playGame(self):
         self.cpu.createShipGrid()
         #here so we can cheat vs cpu
-        print("CPU SHIP GRID")
+        print(("-" * 40) + "CPU SHIP GRID" + ("-" * 40))
         self.cpu.gridShips.printGrid()
         self.human.createShipGrid()
 

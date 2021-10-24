@@ -19,7 +19,7 @@ class HumanPlayer(Player):
         :return: a boolean that is True if the HumanPlayer object can take another turn, and False if they cannot
         """
 
-        print("SHOT GRID")
+        print(("-" * 40) + "SHOT GRID" + ("-" * 40))
         self.gridShots.printGrid()
 
         already_hit = ["X", "O"]
@@ -107,6 +107,12 @@ class HumanPlayer(Player):
                       "D": "Destroyer",
                       "S": "Submarine"
         }
+
+        # prints the blank grid (only runs the first time placeShip() is called)
+        if ship == "A":
+            print("\n\n\n")
+            print(("-" * 40) + "YOUR SHIP GRID" + ("-" * 40))
+            self.gridShips.printGrid()
 
         orientation = input("Do you want your " + ship_dict[ship] +
                                 " to be vertical or horizontal? 0 for vertical, 1 for horizontal: ")
