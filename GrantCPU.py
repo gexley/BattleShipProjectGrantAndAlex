@@ -36,11 +36,11 @@ class GrantCPU(Player):
             otherPlayer.hitsD += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "D")
         else:#if shot misses
-            print("Grant missed.")
+            print("CPU Grant missed.")
             otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "O")
             self.gridShots.changeSingleSpace(fireRow, fireCol, "O")
-            self.fireList.append((fireRow, fireCol, "O", "O"))
-        print ("Alex's SHIP GRID")
+            self.fireList.append((fireRow, fireCol, "O"))
+        print (("-" * 40) + "YOUR SHIP GRID" + ("-" * 40))
         otherPlayer.gridShips.printGrid()
 
     def shotHit(self, otherPlayer, fireRow, fireCol, ship):
@@ -65,15 +65,15 @@ class GrantCPU(Player):
             "D": 2,
             "S": 3
         }
-        print("Grant hit Alex's ship!")
+        print("CPU Grant hit your ship!")
         self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
         otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
         if varLib[ship] == sizeLib[ship]:  # if the cpu has hit the ship enough to sink it
-            print("Grant sunk Alex's", nameLib[ship], "!")
+            print("CPU Grant sunk your", nameLib[ship], "!")
             self.fireList.append((fireRow, fireCol, "X", ship))
             self.searching = True
         else:
-            self.fireList.append((fireRow, fireCol, "X", "O"))
+            self.fireList.append((fireRow, fireCol, "X"))
             self.searching = False
 
     def whereToFire(self):
@@ -87,10 +87,15 @@ class GrantCPU(Player):
             for i in reversed(self.fireList):
                 if i[2] == "X":
                     possibleShots = [(i[0]+1,i[1]),(i[0]-1,i[1]),(i[0],i[1]+1),(i[0],i[1]-1)]
+
                     for a in possibleShots:
-                        if (a[0] >= 0 and a[0] < 10) and (a[1] >= 0 and a[1] < 10):
-                            optimal_row = a[0]
-                            optimal_column = a[1]
+
+                        if (a[0] >= 0 and a[0] < 10) and (a[1] >= 0 and a[1] < 10): #checks if the spot is legal
+                            optimal_row = a[0] #legal next row to fire
+                            optimal_column = a[1] # legal next column to fire
+
+                            if self.gridShots.isSpaceWater(a[0], a[1]):
+                                return (optimal_row, optimal_column)
 
                             while self.gridShots.returnLocation(optimal_row, optimal_column) == "X":
                                 #this outer if-elif-else statement is used to determine the orientation of the Xs
@@ -98,22 +103,24 @@ class GrantCPU(Player):
                                     if (optimal_column + 1 >= 0) and (optimal_column + 1 < 10) \
                                         and self.gridShots.isSpaceWater(optimal_row, optimal_column + 1):
                                         optimal_column += 1
+                                        return (optimal_row, optimal_column)
                                     elif (optimal_column - 1 >= 0 and optimal_column - 1 < 10) \
                                         and self.gridShots.isSpaceWater(optimal_row, optimal_column - 1):
                                         optimal_column -= 1
+                                        return (optimal_row, optimal_column)
                                     else:
                                         continue
                                 elif math.abs(optimal_row - i[0]) == 1:
                                     if (optimal_row + 1 >= 0) and (optimal_row + 1 < 10) \
                                         and self.gridShots.isSpaceWater(optimal_row + 1, optimal_column):
                                         optimal_row += 1
+                                        return (optimal_row, optimal_column)
                                     elif (optimal_row - 1 >= 0) and (optimal_row - 1 < 10) \
                                         and self.gridShots.isSpaceWater(optimal_row - 1, optimal_column):
                                         optimal_row -= 1
+                                        return (optimal_row, optimal_column)
                                     else:
                                         continue
-
-                            return (optimal_row, optimal_column)
 
 
 
