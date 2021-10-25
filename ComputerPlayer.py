@@ -36,10 +36,11 @@ class ComputerPlayer(Player):
             otherPlayer.hitsD += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "D")
         else:#if shot misses
+            print("\n\n\n")
             print("The CPU missed.")
             otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "O")
             self.gridShots.changeSingleSpace(fireRow, fireCol, 'O')
-        print ("SHIP GRID")
+        print (("-" * 40) + "YOUR SHIP GRID" + ("-" * 40))
         otherPlayer.gridShips.printGrid()
 
     def shotHit(self, otherPlayer, fireRow, fireCol, ship):
@@ -64,6 +65,8 @@ class ComputerPlayer(Player):
             "D": 2,
             "S": 3
         }
+
+        print("\n\n\n")
         print("The CPU hit your", nameLib[ship], "!")
         self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
         otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
@@ -73,6 +76,9 @@ class ComputerPlayer(Player):
 
     def placeShip(self, ship , size):
         badship = True
+        orientation = 0
+        startRow = 0
+        startCol = 0
 
         while badship: # runs until the ship generated is valid
             badship = False
