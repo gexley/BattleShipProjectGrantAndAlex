@@ -95,9 +95,6 @@ class GrantCPU(Player):
                             optimal_row = a[0]
                             optimal_column = a[1]
 
-                            if self.gridShots.isSpaceWater(optimal_row, optimal_column):
-                                return (optimal_row, optimal_column)
-
                             while self.gridShots.returnLocation(optimal_row, optimal_column) == "X":
                                 #this outer if-elif-else statement is used to determine the orientation of the Xs
                                 if math.abs(optimal_column - i[1]) == 1:
@@ -122,6 +119,9 @@ class GrantCPU(Player):
                                         return (optimal_row, optimal_column)
                                     else:
                                         continue
+
+                            if self.gridShots.isSpaceWater(optimal_row, optimal_column):
+                                return (optimal_row, optimal_column)
 
     def stillSearching(self):
         if self.totalHits > self.totalSpacesSunk:
