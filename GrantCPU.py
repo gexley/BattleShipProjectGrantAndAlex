@@ -13,9 +13,11 @@ class GrantCPU(Player):
         self.hitsD = 0
         self.fireList = []
         self.searching = True
+        self.totalHits = 0
+        self.totalSpacesSunk = 0
 
     def takeTurn(self, otherPlayer):
-
+        self.stillSearching()
         fireLoc = self.whereToFire()
         fireRow = fireLoc[0]
         fireCol = fireLoc[1]
@@ -36,11 +38,11 @@ class GrantCPU(Player):
             otherPlayer.hitsD += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "D")
         else:#if shot misses
-            print("CPU Grant missed.")
+            print("Grant missed.")
             otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "O")
             self.gridShots.changeSingleSpace(fireRow, fireCol, "O")
             self.fireList.append((fireRow, fireCol, "O", "O"))
-        print (("-" * 40) + "SHIP GRID" + ("-" * 40))
+        print ("Alex's SHIP GRID")
         otherPlayer.gridShips.printGrid()
 
     def shotHit(self, otherPlayer, fireRow, fireCol, ship):
@@ -65,16 +67,16 @@ class GrantCPU(Player):
             "D": 2,
             "S": 3
         }
-        print("CPU Grant hit Your ship!")
+        self.totalHits += 1
+        print("Grant hit Alex's ship!")
         self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
         otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
         if varLib[ship] == sizeLib[ship]:  # if the cpu has hit the ship enough to sink it
-            print("Grant sunk Your", nameLib[ship], "!")
+            print("Grant sunk Alex's", nameLib[ship], "!")
             self.fireList.append((fireRow, fireCol, "X", ship))
-            self.searching = True
+            self.totalSpacesSunk += sizeLib[ship]
         else:
             self.fireList.append((fireRow, fireCol, "X", "O"))
-            self.searching = False
 
     def whereToFire(self):
         if self.searching:
@@ -92,30 +94,39 @@ class GrantCPU(Player):
                             optimal_row = a[0]
                             optimal_column = a[1]
 
+                            if self.gridShots.isSpaceWater(optimal_row, optimal_column):
+                                return (optimal_row, optimal_column)
+
                             while self.gridShots.returnLocation(optimal_row, optimal_column) == "X":
                                 #this outer if-elif-else statement is used to determine the orientation of the Xs
                                 if math.abs(optimal_column - i[1]) == 1:
                                     if (optimal_column + 1 >= 0) and (optimal_column + 1 < 10) \
                                         and self.gridShots.isSpaceWater(optimal_row, optimal_column + 1):
                                         optimal_column += 1
+                                        return (optimal_row, optimal_column)
                                     elif (optimal_column - 1 >= 0 and optimal_column - 1 < 10) \
                                         and self.gridShots.isSpaceWater(optimal_row, optimal_column - 1):
                                         optimal_column -= 1
+                                        return (optimal_row, optimal_column)
                                     else:
                                         continue
                                 elif math.abs(optimal_row - i[0]) == 1:
                                     if (optimal_row + 1 >= 0) and (optimal_row + 1 < 10) \
                                         and self.gridShots.isSpaceWater(optimal_row + 1, optimal_column):
                                         optimal_row += 1
+                                        return (optimal_row, optimal_column)
                                     elif (optimal_row - 1 >= 0) and (optimal_row - 1 < 10) \
                                         and self.gridShots.isSpaceWater(optimal_row - 1, optimal_column):
                                         optimal_row -= 1
+                                        return (optimal_row, optimal_column)
                                     else:
                                         continue
 
-                            return (optimal_row, optimal_column)
-
-
+    def stillSearching(self):
+        if self.totalHits > self.totalSpacesSunk:
+            self.searching = False
+        else:
+            self.searching = True
 
     def placeShip(self, ship , size):
         badship = True
@@ -159,5 +170,3 @@ class GrantCPU(Player):
             return False
         else:#if the cpu still has ships
             return True
-
-
