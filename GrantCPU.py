@@ -1,5 +1,6 @@
 import random
 from Player import Player
+from math import abs
 
 
 class GrantCPU(Player):
@@ -38,11 +39,11 @@ class GrantCPU(Player):
             otherPlayer.hitsD += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "D")
         else:#if shot misses
-            print("Grant missed.")
+            print("CPU Grant missed.")
             otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "O")
             self.gridShots.changeSingleSpace(fireRow, fireCol, "O")
             self.fireList.append((fireRow, fireCol, "O", "O"))
-        print ("Alex's SHIP GRID")
+        print (("-" * 40) + "YOUR SHIP GRID" + ("-" * 40))
         otherPlayer.gridShips.printGrid()
 
     def shotHit(self, otherPlayer, fireRow, fireCol, ship):
@@ -68,11 +69,11 @@ class GrantCPU(Player):
             "S": 3
         }
         self.totalHits += 1
-        print("Grant hit Alex's ship!")
+        print("CPU Grant hit your ship!")
         self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
         otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
         if varLib[ship] == sizeLib[ship]:  # if the cpu has hit the ship enough to sink it
-            print("Grant sunk Alex's", nameLib[ship], "!")
+            print("CPU Grant sunk your", nameLib[ship], "!")
             self.fireList.append((fireRow, fireCol, "X", ship))
             self.totalSpacesSunk += sizeLib[ship]
         else:
