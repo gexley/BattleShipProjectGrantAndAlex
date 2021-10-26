@@ -1,6 +1,5 @@
 import random
 from Player import Player
-from math import abs
 
 
 class GrantCPU(Player):
@@ -97,7 +96,7 @@ class GrantCPU(Player):
 
                             while self.gridShots.returnLocation(optimal_row, optimal_column) == "X":
                                 #this outer if-elif-else statement is used to determine the orientation of the Xs
-                                if math.abs(optimal_column - i[1]) == 1:
+                                if abs(optimal_column - i[1]) == 1:
                                     if (optimal_column + 1 >= 0) and (optimal_column + 1 < 10) \
                                         and self.gridShots.isSpaceWater(optimal_row, optimal_column + 1):
                                         optimal_column += 1
@@ -108,7 +107,7 @@ class GrantCPU(Player):
                                         return (optimal_row, optimal_column)
                                     else:
                                         continue
-                                elif math.abs(optimal_row - i[0]) == 1:
+                                elif abs(optimal_row - i[0]) == 1:
                                     if (optimal_row + 1 >= 0) and (optimal_row + 1 < 10) \
                                         and self.gridShots.isSpaceWater(optimal_row + 1, optimal_column):
                                         optimal_row += 1
