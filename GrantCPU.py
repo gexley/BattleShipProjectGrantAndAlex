@@ -89,11 +89,31 @@ class GrantCPU(Player):
                     possibleShots = [(i[0]+1,i[1]),(i[0]-1,i[1]),(i[0],i[1]+1),(i[0],i[1]-1)]
                     for a in possibleShots:
                         if (a[0] >= 0 and a[0] < 10) and (a[1] >= 0 and a[1] < 10):
+                            optimal_row = a[0]
+                            optimal_column = a[1]
 
-                            while self.gridShots.returnLocation(a[0], a[1]) == "X":
-                                if (a[0] + 1) >= 0
+                            while self.gridShots.returnLocation(optimal_row, optimal_column) == "X":
+                                #this outer if-elif-else statement is used to determine the orientation of the Xs
+                                if math.abs(optimal_column - i[1]) == 1:
+                                    if (optimal_column + 1 >= 0) and (optimal_column + 1 < 10) \
+                                        and self.gridShots.isSpaceWater(optimal_row, optimal_column + 1):
+                                        optimal_column += 1
+                                    elif (optimal_column - 1 >= 0 and optimal_column - 1 < 10) \
+                                        and self.gridShots.isSpaceWater(optimal_row, optimal_column - 1):
+                                        optimal_column -= 1
+                                    else:
+                                        continue
+                                elif math.abs(optimal_row - i[0]) == 1:
+                                    if (optimal_row + 1 >= 0) and (optimal_row + 1 < 10) \
+                                        and self.gridShots.isSpaceWater(optimal_row + 1, optimal_column):
+                                        optimal_row += 1
+                                    elif (optimal_row - 1 >= 0) and (optimal_row - 1 < 10) \
+                                        and self.gridShots.isSpaceWater(optimal_row - 1, optimal_column):
+                                        optimal_row -= 1
+                                    else:
+                                        continue
 
-                                return (a[0], a[1])
+                            return (optimal_row, optimal_column)
 
     def stillSearching(self):
         for i in self.fireList:
