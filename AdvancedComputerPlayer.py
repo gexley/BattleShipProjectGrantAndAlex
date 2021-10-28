@@ -2,7 +2,7 @@ import random
 from Player import Player
 
 
-class GrantCPU(Player):
+class AdvancedComputerPlayer(Player):
 
     def __init__(self):
         Player.__init__(self)
@@ -19,6 +19,7 @@ class GrantCPU(Player):
     def takeTurn(self, otherPlayer):
         self.stillSearching()
         fireLoc = self.whereToFire()
+        print(fireLoc)
         fireRow = fireLoc[0]
         fireCol = fireLoc[1]
 
@@ -38,10 +39,10 @@ class GrantCPU(Player):
             otherPlayer.hitsD += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "D")
         else:#if shot misses
-            print("CPU Grant missed.")
+            print("The CPU missed.")
             otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "O")
             self.gridShots.changeSingleSpace(fireRow, fireCol, "O")
-            self.fireList.append((fireRow, fireCol, "O", "O"))
+            self.fireList.append((fireRow, fireCol, "O"))
         print (("-" * 40) + "YOUR SHIP GRID" + ("-" * 40))
         otherPlayer.gridShips.printGrid()
 
@@ -68,67 +69,77 @@ class GrantCPU(Player):
             "S": 3
         }
         self.totalHits += 1
-        print("CPU Grant hit your ship!")
+        print("The CPU hit your ship!")
         self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
         otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "X")
+        self.fireList.append((fireRow, fireCol, "X"))
         if varLib[ship] == sizeLib[ship]:  # if the cpu has hit the ship enough to sink it
-            print("CPU Grant sunk your", nameLib[ship], "!")
-            self.fireList.append((fireRow, fireCol, "X"))
+            print("The CPU sunk your", nameLib[ship], "!")
             self.totalSpacesSunk += sizeLib[ship]
-        else:
-            self.fireList.append((fireRow, fireCol, "O"))
 
     def whereToFire(self):
         if self.searching:
-            print ("serarching = " , self.searching)
+            print ("searching = " , self.searching)
             while True:
                 fireRow = random.randint(0,9)
                 fireCol = random.randint(0,9)
                 if self.gridShots.isSpaceWater(fireRow, fireCol) and (fireRow + fireCol) % 2 == 0:
                     return (fireRow, fireCol)
         else:
-            print("serarching = ", self.searching)
-            for i in reversed(self.fireList):
-                if i[2] == "X":
-                    # possibleShots = [(i[0]+1,i[1]),(i[0]-1,i[1]),(i[0],i[1]+1),(i[0],i[1]-1)]
+            print("searching = ", self.searching)
+            for index, current_tuple in enumerate(reversed(self.fireList)):
 
-                    # traverses possibleShots
-                    for j in range(4):
+                for i in range(4):
 
-                        optimal_row = i[0]
-                        optimal_column = i[1]
+                    optimal_row = current_tuple[0]
+                    optimal_column = current_tuple[1]
 
-                        if self.fireList.__len__() > 1 and \
-                                self.gridShots.returnLocation(self.fireList[i-1][0], self.fireList[i-1][1]) == "X":
-                            # this outer if-elif-else statement is used to determine the orientation of the Xs
-                            if abs(i[1] - self.fireList[i-1][1]) == 1:
-                                # this if-elif-else statement determines if the optimal column is legal
-                                if (optimal_column + 1 >= 0) and (optimal_column + 1 < 10) \
-                                    and self.gridShots.isSpaceWater(optimal_row, optimal_column + 1):
-                                    optimal_column += 1
-                                    return (optimal_row, optimal_column)
-                                elif (optimal_column - 1 >= 0 and optimal_column - 1 < 10) \
-                                    and self.gridShots.isSpaceWater(optimal_row, optimal_column - 1):
-                                    optimal_column -= 1
-                                    return (optimal_row, optimal_column)
-                            elif abs(i[0] - self.fireList[i-1][0]) == 1:
-                                # this if-elif-else statement determines if the optimal row is legal
-                                if (optimal_row + 1 >= 0) and (optimal_row + 1 < 10) \
-                                    and self.gridShots.isSpaceWater(optimal_row + 1, optimal_column):
-                                    optimal_row += 1
-                                    return (optimal_row, optimal_column)
-                                elif (optimal_row - 1 >= 0) and (optimal_row - 1 < 10) \
-                                    and self.gridShots.isSpaceWater(optimal_row - 1, optimal_column):
-                                    optimal_row -= 1
-                                    return (optimal_row, optimal_column)
-                        else:
-                            print("FAIL SAFE")
-                            self.searching = False
-                            while True:
-                                fireRow = random.randint(0, 9)
-                                fireCol = random.randint(0, 9)
-                                if self.gridShots.isSpaceWater(fireRow, fireCol) and (fireRow + fireCol) % 2 == 0:
-                                    return (fireRow, fireCol)
+                    if self.fireList.__len__() > 1 and \
+                            self.gridShots.returnLocation(self.fireList[index + 1][0], self.fireList[index + 1][1]) == "X":
+
+                        # this outer if-elif-else statement is used to determine the orientation of the Xs
+                        if abs(current_tuple[1] - self.fireList[index + 1][1]) == 1:
+                            # this if-elif-else statement determines if the optimal column is legal
+                            if (optimal_column + 1 >= 0) and (optimal_column + 1 < 10) \
+                                and self.gridShots.isSpaceWater(optimal_row, optimal_column + 1):
+                                optimal_column += 1
+                                print("optimal row", optimal_row)
+                                print("optimal column", optimal_column)
+                                return optimal_row, optimal_column
+                            elif (optimal_column - 1 >= 0 and optimal_column - 1 < 10) \
+                                and self.gridShots.isSpaceWater(optimal_row, optimal_column - 1):
+                                optimal_column -= 1
+                                print("optimal row", optimal_row)
+                                print("optimal column", optimal_column)
+                                return optimal_row, optimal_column
+                        elif abs(current_tuple[0] - self.fireList[index + 1][0]) == 1:
+                            # this if-elif-else statement determines if the optimal row is legal
+                            if (optimal_row + 1 >= 0) and (optimal_row + 1 < 10) \
+                                and self.gridShots.isSpaceWater(optimal_row + 1, optimal_column):
+                                optimal_row += 1
+                                print("optimal row", optimal_row)
+                                print("optimal column", optimal_column)
+                                return optimal_row, optimal_column
+                            elif (optimal_row - 1 >= 0) and (optimal_row - 1 < 10) \
+                                and self.gridShots.isSpaceWater(optimal_row - 1, optimal_column):
+                                optimal_row -= 1
+                                print("optimal row", optimal_row)
+                                print("optimal column", optimal_column)
+                                return optimal_row, optimal_column
+                    elif self.gridShots.returnLocation(self.fireList[index][0], self.fireList[index][1]) == "X":
+                        possibleShots = [(i[0] + 1, i[1]), (i[0] - 1, i[1]), (i[0], i[1] + 1), (i[0], i[1] - 1)]
+
+                        for a in possibleShots:
+                            if (0 < a[0] < 10) and (0 < a[1] < 10) and self.gridShots.isSpaceWater(a[0], a[1]):
+                                return a[0], a[1]
+                    else:
+                        print("FAIL SAFE")
+                        self.searching = True
+                        while True:
+                            fireRow = random.randint(0, 9)
+                            fireCol = random.randint(0, 9)
+                            if self.gridShots.isSpaceWater(fireRow, fireCol) and (fireRow + fireCol) % 2 == 0:
+                                return (fireRow, fireCol)
 
     def stillSearching(self):
         if self.totalHits > self.totalSpacesSunk:
