@@ -178,13 +178,17 @@ class AdvancedComputerPlayer(Player):
                                 return (fireRow, fireCol)
 
     def stillSearching(self):
-        """checks if the AdvancedComputerPlayer object should still be searching for a ship to hit or whether it has
+        """checks if the AdvancedComputerPlayer object should still be searching for a ship to hit or if it has
         already found one
 
         """
 
-        if self.totalHits > self.totalSpacesSunk: # if the total hits on a ship is equal to the total hits needed to
+        # if self.totalHits > self.totalSpacesSunk: # if the total hits on a ship is equal to the total hits needed to
             # sink the ship
+        if len(self.fireList) <= 1:
+            self.searching = True
+        elif self.gridShots.returnLocation(
+                self.fireList[len(self.fireList) - 1][0], self.fireList[len(self.fireList) - 1][1]) == "X":
             self.searching = False
         else:
             self.searching = True
