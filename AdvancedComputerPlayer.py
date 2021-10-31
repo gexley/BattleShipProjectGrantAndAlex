@@ -168,7 +168,6 @@ class AdvancedComputerPlayer(Player):
                             if (0 < a[0] < 10) and (0 < a[1] < 10) and self.gridShots.isSpaceWater(a[0], a[1]):
                                 return a[0], a[1]
 
-                        print("FAIL SAFE")
                         self.searching = True
                         while True:
                             fireRow = random.randint(0, 9)
@@ -179,12 +178,23 @@ class AdvancedComputerPlayer(Player):
                                 return (fireRow, fireCol)
 
     def stillSearching(self):
-        if self.totalHits > self.totalSpacesSunk:
+        """checks if the AdvancedComputerPlayer object should still be searching for a ship to hit or whether it has
+        already found one
+
+        """
+
+        if self.totalHits > self.totalSpacesSunk: # if the total hits on a ship is equal to the total hits needed to
+            # sink the ship
             self.searching = False
         else:
             self.searching = True
 
     def placeShip(self, ship , size):
+        """Places a ship on the AdvancedComputerPlayer's ship grid.
+
+        :param ship: a single-letter String corresponding to the type of ship to be placed
+        :param size: an int containing the value of the size of the ship
+        """
         badship = True
 
         orientation = 0
@@ -214,12 +224,14 @@ class AdvancedComputerPlayer(Player):
         if orientation == 1: # if the ship is vertical
             self.gridShips.changeCol(startCol, ship, startRow, size)
 
-    # this method will determine if the Player's ship grid still
-    # has ships or not
-    # If they have no ships left, the other player wins
-    # This method returns true if they still have ships
-    # This method returns false if they don't have ships
     def stillHasShips(self):
+        """Determines if the Player's ship grid still has ships or not
+
+        If they have no ships left, the other player wins.
+
+        :return: True if they still have ships, False if they do not
+        """
+
         # this if-else statement is used to determine whether the game is over (meaning that the player has
         # no more turns left)
         if self.hitsA == 5 and self.hitsB == 4 and self.hitsC == 3 and self.hitsS == 3 and self.hitsD == 2:#if all the cpus ships have been sunk
