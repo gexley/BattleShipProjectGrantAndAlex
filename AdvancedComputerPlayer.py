@@ -13,8 +13,9 @@ class AdvancedComputerPlayer(Player):
         self.hitsD = 0
         self.fireList = []
         self.searching = True
-        self.totalHits = 0
-        self.totalSpacesSunk = 0
+        self.totalHits = 0 # the total number of hits on a specific ship
+        self.totalSpacesSunk = 0 # the total number of hits needed to sink a specific ship
+        self.count = 0
 
     def takeTurn(self, otherPlayer):
         """Allows the computer to take a turn, consisting of firing at specific location and checking if a ship
@@ -24,7 +25,7 @@ class AdvancedComputerPlayer(Player):
 
         :param otherPlayer: an object of the HumanPlayer class
         """
-        self.stillSearching()
+        # self.stillSearching()
         fireLoc = self.whereToFire()
         print(fireLoc)
         fireRow = fireLoc[0]
@@ -46,7 +47,6 @@ class AdvancedComputerPlayer(Player):
             otherPlayer.hitsD += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "D")
         else: # if the shot misses
-            self.searching = True
             print("The CPU missed.")
             otherPlayer.gridShips.changeSingleSpace(fireRow, fireCol, "O")
             self.gridShots.changeSingleSpace(fireRow, fireCol, "O")
@@ -86,6 +86,8 @@ class AdvancedComputerPlayer(Player):
             "D": 2,
             "S": 3
         }
+
+        self.searching = False
         self.totalHits += 1
         print("The CPU hit your ship!")
         self.gridShots.changeSingleSpace(fireRow, fireCol, 'X')
@@ -116,82 +118,77 @@ class AdvancedComputerPlayer(Player):
             # traverses fireList in reverse
             for index, current_tuple in enumerate(reversed(self.fireList)):
 
-                print("index: ", index)
-                print("current tuple: ", current_tuple)
+                optimal_row = current_tuple[0]
+                optimal_column = current_tuple[1]
 
-                # used to check both conditions of the innermost if-statements (BELOW)
-                for i in range(2):
-
-                    optimal_row = current_tuple[0]
-                    optimal_column = current_tuple[1]
-
-                    # checks if a ship was hit twice in a row
-                    if self.fireList.__len__() > 1 and \
-                            self.fireList[index + 1][2] == 'X':
-                        # this outer if-elif-else statement is used to determine the orientation of the hits
-                        if abs(current_tuple[1] - self.fireList[index + 1][1]) == 1:
-                            # this if-elif-else statement determines if the optimal column is legal (INNERMOST)
-                            if (optimal_column + 1 >= 0) and (optimal_column + 1 < 10) \
+                if self.fireList.__len__() > 1 and \
+                        self.fireList[index][2] == 'X' and self.fireList[index - 1][2] == 'X':
+                    # this outer if-elif-else statement is used to determine the orientation of the hits
+                    if abs(current_tuple[1] - self.fireList[index + 1][1]) == 1:
+                        # this if-elif-else statement determines if the optimal column is legal (INNERMOST)
+                        if (optimal_column + 1 >= 0) and (optimal_column + 1 < 10) \
                                 and self.gridShots.isSpaceWater(optimal_row, optimal_column + 1):
-                                optimal_column += 1
-                                print("optimal row", optimal_row)
-                                print("optimal column", optimal_column)
-                                return optimal_row, optimal_column
-                            elif (optimal_column - 1 >= 0 and optimal_column - 1 < 10) \
+                            optimal_column += 1
+                            return optimal_row, optimal_column
+                        elif (optimal_column - 1 >= 0 and optimal_column - 1 < 10) \
                                 and self.gridShots.isSpaceWater(optimal_row, optimal_column - 1):
-                                optimal_column -= 1
-                                print("optimal row", optimal_row)
-                                print("optimal column", optimal_column)
-                                return optimal_row, optimal_column
-                        elif abs(current_tuple[0] - self.fireList[index + 1][0]) == 1:
-                            # this if-elif-else statement determines if the optimal row is legal (INNERMOST)
-                            if (optimal_row + 1 >= 0) and (optimal_row + 1 < 10) \
+                            optimal_column -= 1
+                            return optimal_row, optimal_column
+                    elif abs(current_tuple[0] - self.fireList[index + 1][0]) == 1:
+                        # this if-elif-else statement determines if the optimal row is legal (INNERMOST)
+                        if (optimal_row + 1 >= 0) and (optimal_row + 1 < 10) \
                                 and self.gridShots.isSpaceWater(optimal_row + 1, optimal_column):
-                                optimal_row += 1
-                                print("optimal row", optimal_row)
-                                print("optimal column", optimal_column)
-                                return optimal_row, optimal_column
-                            elif (optimal_row - 1 >= 0) and (optimal_row - 1 < 10) \
+                            optimal_row += 1
+                            return optimal_row, optimal_column
+                        elif (optimal_row - 1 >= 0) and (optimal_row - 1 < 10) \
                                 and self.gridShots.isSpaceWater(optimal_row - 1, optimal_column):
-                                optimal_row -= 1
-                                print("optimal row", optimal_row)
-                                print("optimal column", optimal_column)
-                                return optimal_row, optimal_column
-                    else: # if HumanPlayer's ship was hit for the first time, checks around the location
-                        # where the ship was hit
-                        possibleShots = [(current_tuple[0] + 1, current_tuple[1]), (current_tuple[0] - 1, current_tuple[1]),
-                                         (current_tuple[0], current_tuple[1] + 1), (current_tuple[0], current_tuple[1] - 1)]
+                            optimal_row -= 1
+                            return optimal_row, optimal_column
+                elif current_tuple[2] == 'X': # used to checks all spaces
+                    # around the location where the ship was hit
+                    possibleShots = [(current_tuple[0] + 1, current_tuple[1]),
+                                     (current_tuple[0] - 1, current_tuple[1]),
+                                     (current_tuple[0], current_tuple[1] + 1),
+                                     (current_tuple[0], current_tuple[1] - 1)]
 
-                        #traverses the list of tuples "possibleShots"
-                        for a in possibleShots:
-                            #checks if the current tuple in possibleShots is a valid location to fire a shot
-                            if (0 < a[0] < 10) and (0 < a[1] < 10) and self.gridShots.isSpaceWater(a[0], a[1]):
-                                return a[0], a[1]
+                    # traverses the list of tuples "possibleShots"
+                    for a in possibleShots:
+                        # checks if the current tuple in possibleShots is a valid location to fire a shot
+                        if (0 <= a[0] < 10) and (0 <= a[1] < 10) and self.gridShots.isSpaceWater(a[0], a[1]):
+                            return a[0], a[1]
 
-                        self.searching = True
-                        while True:
-                            fireRow = random.randint(0, 9)
-                            fireCol = random.randint(0, 9)
-                            # determines if the location of the shot to be fired is valid and the sum of the
-                            # row and column of the shot to be fired is evenly numbered (OPTIMIZATION)
-                            if self.gridShots.isSpaceWater(fireRow, fireCol) and (fireRow + fireCol) % 2 == 0:
-                                return (fireRow, fireCol)
+                    self.searching = True
+                    while True:
+                        fireRow = random.randint(0, 9)
+                        fireCol = random.randint(0, 9)
 
-    def stillSearching(self):
-        """checks if the AdvancedComputerPlayer object should still be searching for a ship to hit or if it has
-        already found one
+                        # if the space is legal and the sum of the row and column of the shot
+                        # to be fired is evenly numbered (OPTIMIZATION)
+                        if self.gridShots.isSpaceWater(fireRow, fireCol) and (fireRow + fireCol) % 2 == 0:
+                            return (fireRow, fireCol)
 
-        """
-
-        # if self.totalHits > self.totalSpacesSunk: # if the total hits on a ship is equal to the total hits needed to
-            # sink the ship
-        if len(self.fireList) <= 1:
-            self.searching = True
-        elif self.gridShots.returnLocation(
-                self.fireList[len(self.fireList) - 1][0], self.fireList[len(self.fireList) - 1][1]) == "X":
-            self.searching = False
-        else:
-            self.searching = True
+    # def stillSearching(self):
+    #     """checks if the AdvancedComputerPlayer object should still be searching for a ship to hit or if it has
+    #     found one
+    #     """
+    #
+    #     # handles the possibility that the fireList is too short
+    #     if len(self.fireList) <= 1:
+    #         self.searching = True
+    #
+    #     # traverses fireList in reverse
+    #     # (while keeping track of the current tuple and the index of the current tuple in the fireList)
+    #     for index, current_tuple in enumerate(reversed(self.fireList)):
+    #         if self.gridShots.returnLocation(
+    #                 current_tuple[0], current_tuple[1]) == "X": # if the current shot in fireList is a hit
+    #             self.searching = False
+    #             break
+    #         elif self.count >= 5: # used to check all of the spaces around a hit on a ship
+    #             self.count = 0
+    #             self.searching = True
+    #             break
+    #         else:
+    #             self.count += 1
 
     def placeShip(self, ship , size):
         """Places a ship on the AdvancedComputerPlayer's ship grid.
@@ -240,5 +237,5 @@ class AdvancedComputerPlayer(Player):
         # no more turns left)
         if self.hitsA == 5 and self.hitsB == 4 and self.hitsC == 3 and self.hitsS == 3 and self.hitsD == 2:#if all the cpus ships have been sunk
             return False
-        else:#if the cpu still has ships
+        else: # if the cpu still has ships
             return True
