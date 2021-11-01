@@ -1,6 +1,6 @@
-from GrantCPUGameTest import GrantCPUGameTest
+from AdvancedComputerPlayerGame import AdvancedComputerPlayerGame
 
-g = GrantCPUGameTest()
+g = AdvancedComputerPlayerGame()
 
 g.playGame()
 

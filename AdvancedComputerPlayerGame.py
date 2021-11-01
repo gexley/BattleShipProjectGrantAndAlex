@@ -1,11 +1,11 @@
 from HumanPlayer import HumanPlayer
-from GrantCPU import GrantCPU
+from AdvancedComputerPlayer import AdvancedComputerPlayer
 
-class GrantCPUGameTest:
+class AdvancedComputerPlayerGame:
 
     def __init__(self):
         self.human = HumanPlayer()
-        self.cpu = GrantCPU()
+        self.cpu = AdvancedComputerPlayer()
 
     def playGame(self):
         self.cpu.createShipGrid()
@@ -25,6 +25,6 @@ class GrantCPUGameTest:
                 humanWon = True
                 break
         if humanWon:
-            print("Congradulations!!!!! You Won!!!!!!!!!!")
+            print("Congratulations!!!!! You Won!!!!!!!!!!")
         else:
-            print("WOW! You are unbelievably bad at this game")
+            print("WOW! You are unbelievably bad at this game.")
