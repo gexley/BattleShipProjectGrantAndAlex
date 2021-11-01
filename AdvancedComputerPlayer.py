@@ -185,13 +185,22 @@ class AdvancedComputerPlayer(Player):
 
         # if self.totalHits > self.totalSpacesSunk: # if the total hits on a ship is equal to the total hits needed to
             # sink the ship
+
+        count = 0
+
         if len(self.fireList) <= 1:
             self.searching = True
-        elif self.gridShots.returnLocation(
-                self.fireList[len(self.fireList) - 1][0], self.fireList[len(self.fireList) - 1][1]) == "X":
-            self.searching = False
-        else:
-            self.searching = True
+
+        for index, current_tuple in enumerate(reversed(self.fireList)):
+            if self.gridShots.returnLocation(
+                    self.fireList[index][0], self.fireList[len(self.fireList) - 1][1]) == "X":
+                self.searching = False
+                break
+            elif count >= 5:
+                self.searching = True
+                break
+            else:
+                count += 1
 
     def placeShip(self, ship , size):
         """Places a ship on the AdvancedComputerPlayer's ship grid.
