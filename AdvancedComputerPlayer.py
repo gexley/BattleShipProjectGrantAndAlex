@@ -25,25 +25,25 @@ class AdvancedComputerPlayer(Player):
 
         :param otherPlayer: an object of the HumanPlayer class
         """
-        # self.stillSearching()
+        self.stillSearching()
         fireLoc = self.whereToFire()
         print(fireLoc)
         fireRow = fireLoc[0]
         fireCol = fireLoc[1]
 
-        if otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'A':#if shot hits the Aircraft Carrier
+        if otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'A': # if shot hits the Aircraft Carrier
             otherPlayer.hitsA += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "A")
-        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'B':#if shot hits the Battleship
+        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'B': # if shot hits the Battleship
             otherPlayer.hitsB += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "B")
-        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'C':#if shot hits the C ship
+        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'C': # if shot hits the C ship
             otherPlayer.hitsC += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "C")
-        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'S':#if shot hits the S ship
+        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'S': # if shot hits the S ship
             otherPlayer.hitsS += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "S")
-        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'D':#if shot hits the D ship
+        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'D': # if shot hits the D ship
             otherPlayer.hitsD += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "D")
         else: # if the shot misses
@@ -124,7 +124,7 @@ class AdvancedComputerPlayer(Player):
                 if self.fireList.__len__() > 1 and \
                         self.fireList[index][2] == 'X' and self.fireList[index - 1][2] == 'X':
                     # this outer if-elif-else statement is used to determine the orientation of the hits
-                    if abs(current_tuple[1] - self.fireList[index + 1][1]) == 1:
+                    if abs(current_tuple[1] - self.fireList[index - 1][1]) == 1:
                         # this if-elif-else statement determines if the optimal column is legal (INNERMOST)
                         if (optimal_column + 1 >= 0) and (optimal_column + 1 < 10) \
                                 and self.gridShots.isSpaceWater(optimal_row, optimal_column + 1):
@@ -134,7 +134,7 @@ class AdvancedComputerPlayer(Player):
                                 and self.gridShots.isSpaceWater(optimal_row, optimal_column - 1):
                             optimal_column -= 1
                             return optimal_row, optimal_column
-                    elif abs(current_tuple[0] - self.fireList[index + 1][0]) == 1:
+                    elif abs(current_tuple[0] - self.fireList[index - 1][0]) == 1:
                         # this if-elif-else statement determines if the optimal row is legal (INNERMOST)
                         if (optimal_row + 1 >= 0) and (optimal_row + 1 < 10) \
                                 and self.gridShots.isSpaceWater(optimal_row + 1, optimal_column):
@@ -167,28 +167,17 @@ class AdvancedComputerPlayer(Player):
                         if self.gridShots.isSpaceWater(fireRow, fireCol) and (fireRow + fireCol) % 2 == 0:
                             return (fireRow, fireCol)
 
-    # def stillSearching(self):
-    #     """checks if the AdvancedComputerPlayer object should still be searching for a ship to hit or if it has
-    #     found one
-    #     """
-    #
-    #     # handles the possibility that the fireList is too short
-    #     if len(self.fireList) <= 1:
-    #         self.searching = True
-    #
-    #     # traverses fireList in reverse
-    #     # (while keeping track of the current tuple and the index of the current tuple in the fireList)
-    #     for index, current_tuple in enumerate(reversed(self.fireList)):
-    #         if self.gridShots.returnLocation(
-    #                 current_tuple[0], current_tuple[1]) == "X": # if the current shot in fireList is a hit
-    #             self.searching = False
-    #             break
-    #         elif self.count >= 5: # used to check all of the spaces around a hit on a ship
-    #             self.count = 0
-    #             self.searching = True
-    #             break
-    #         else:
-    #             self.count += 1
+    def stillSearching(self):
+        """checks if the AdvancedComputerPlayer object should still be searching for a ship to hit or if it has
+        found one
+        """
+
+        if self.totalHits > self.totalSpacesSunk:
+            self.searching = False
+        else:
+            self.searching = True
+
+
 
     def placeShip(self, ship , size):
         """Places a ship on the AdvancedComputerPlayer's ship grid.
@@ -211,13 +200,13 @@ class AdvancedComputerPlayer(Player):
                 startCol = random.randint(0, 10-size)
                 startRow = random.randint(0, 9)
                 for i in range(size): # runs size amount of times
-                    if not self.gridShips.isSpaceWater(startRow , startCol+i):# if the placement is not legal
+                    if not self.gridShips.isSpaceWater(startRow , startCol+i): # if the placement is not legal
                         badship = True
             elif orientation == 1: # if the ship is vertical
                 startCol = random.randint(0, 9)
                 startRow = random.randint(0, 10-size)
                 for i in range(size): # runs size amount of times
-                    if not self.gridShips.isSpaceWater(startRow + i, startCol):#if the placement is not legal
+                    if not self.gridShips.isSpaceWater(startRow + i, startCol): # if the placement is not legal
                         badship = True
 
         if orientation == 0: # if the ship is horizontal
@@ -235,7 +224,8 @@ class AdvancedComputerPlayer(Player):
 
         # this if-else statement is used to determine whether the game is over (meaning that the player has
         # no more turns left)
-        if self.hitsA == 5 and self.hitsB == 4 and self.hitsC == 3 and self.hitsS == 3 and self.hitsD == 2:#if all the cpus ships have been sunk
+        if self.hitsA == 5 and self.hitsB == 4 and self.hitsC == 3 and self.hitsS == 3 and self.hitsD == 2: # if all
+            # the cpus ships have been sunk
             return False
         else: # if the cpu still has ships
             return True
