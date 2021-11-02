@@ -6,16 +6,15 @@ class AdvancedComputerPlayer(Player):
 
     def __init__(self):
         Player.__init__(self)
-        self.hitsA = 0
+        self.hitsA = 0 # the hits on this player's Aircraft Carrier (by the opponent)
         self.hitsB = 0
         self.hitsC = 0
         self.hitsS = 0
         self.hitsD = 0
         self.fireList = []
         self.searching = True
-        self.totalHits = 0 # the total number of hits on a specific ship
-        self.totalSpacesSunk = 0 # the total number of hits needed to sink a specific ship
-        self.count = 0
+        self.totalHits = 0 # the total number of hits on the player's shot grid
+        self.totalSpacesSunk = 0 # the total number of spaces on all sunk ships on the player's shot grid
 
     def takeTurn(self, otherPlayer):
         """Allows the computer to take a turn, consisting of firing at specific location and checking if a ship
@@ -37,13 +36,13 @@ class AdvancedComputerPlayer(Player):
         elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'B': # if shot hits the Battleship
             otherPlayer.hitsB += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "B")
-        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'C': # if shot hits the C ship
+        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'C': # if shot hits the Cruiser
             otherPlayer.hitsC += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "C")
-        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'S': # if shot hits the S ship
+        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'S': # if shot hits the Submarine
             otherPlayer.hitsS += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "S")
-        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'D': # if shot hits the D ship
+        elif otherPlayer.gridShips.returnLocation(fireRow, fireCol) == 'D': # if shot hits the Destroyer
             otherPlayer.hitsD += 1
             self.shotHit(otherPlayer, fireRow, fireCol, "D")
         else: # if the shot misses
@@ -103,7 +102,6 @@ class AdvancedComputerPlayer(Player):
         :return: a tuple containing the row and column of the next shot to be fired
         """
         if self.searching: # if the AdvancedComputerPlayer is searching for a ship to hit
-            print ("searching = " , self.searching)
             while True:
                 fireRow = random.randint(0,9)
                 fireCol = random.randint(0,9)
@@ -111,9 +109,8 @@ class AdvancedComputerPlayer(Player):
                 # if the space is legal and the sum of the row and column of the shot
                 # to be fired is evenly numbered (OPTIMIZATION)
                 if self.gridShots.isSpaceWater(fireRow, fireCol) and (fireRow + fireCol) % 2 == 0:
-                    return (fireRow, fireCol)
-        else: # if the AdvancedComputerPlayer previously hit a ship
-            print("searching = ", self.searching)
+                    return fireRow, fireCol
+        else: # if the AdvancedComputerPlayer found a ship to continue firing at
 
             # traverses fireList in reverse
             for index, current_tuple in enumerate(reversed(self.fireList)):
@@ -165,19 +162,16 @@ class AdvancedComputerPlayer(Player):
                         # if the space is legal and the sum of the row and column of the shot
                         # to be fired is evenly numbered (OPTIMIZATION)
                         if self.gridShots.isSpaceWater(fireRow, fireCol) and (fireRow + fireCol) % 2 == 0:
-                            return (fireRow, fireCol)
+                            return fireRow, fireCol
 
     def stillSearching(self):
         """checks if the AdvancedComputerPlayer object should still be searching for a ship to hit or if it has
         found one
         """
-
         if self.totalHits > self.totalSpacesSunk:
             self.searching = False
         else:
             self.searching = True
-
-
 
     def placeShip(self, ship , size):
         """Places a ship on the AdvancedComputerPlayer's ship grid.
