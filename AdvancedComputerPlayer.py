@@ -119,9 +119,11 @@ class AdvancedComputerPlayer(Player):
                 optimal_column = current_tuple[1]
 
                 if self.fireList.__len__() > 1 and \
-                        self.fireList[index][2] == 'X' and self.fireList[index - 1][2] == 'X':
+                        self.fireList[index][2] == 'X' and self.fireList[index - 1][2] == 'X': # used to check if a ship was hit twice in a row
+
                     # this outer if-elif-else statement is used to determine the orientation of the hits
                     if abs(current_tuple[1] - self.fireList[index - 1][1]) == 1:
+
                         # this if-elif-else statement determines if the optimal column is legal (INNERMOST)
                         if (optimal_column + 1 >= 0) and (optimal_column + 1 < 10) \
                                 and self.gridShots.isSpaceWater(optimal_row, optimal_column + 1):
@@ -132,6 +134,7 @@ class AdvancedComputerPlayer(Player):
                             optimal_column -= 1
                             return optimal_row, optimal_column
                     elif abs(current_tuple[0] - self.fireList[index - 1][0]) == 1:
+
                         # this if-elif-else statement determines if the optimal row is legal (INNERMOST)
                         if (optimal_row + 1 >= 0) and (optimal_row + 1 < 10) \
                                 and self.gridShots.isSpaceWater(optimal_row + 1, optimal_column):
@@ -154,6 +157,7 @@ class AdvancedComputerPlayer(Player):
                         if (0 <= a[0] < 10) and (0 <= a[1] < 10) and self.gridShots.isSpaceWater(a[0], a[1]):
                             return a[0], a[1]
 
+                    # FAIL SAFE (if there are no more possible shots around the location of a certain hit)
                     self.searching = True
                     while True:
                         fireRow = random.randint(0, 9)
@@ -168,10 +172,12 @@ class AdvancedComputerPlayer(Player):
         """checks if the AdvancedComputerPlayer object should still be searching for a ship to hit or if it has
         found one
         """
+
+        # checks if the total number of hits is greater than the total hits on all sunk ships
         if self.totalHits > self.totalSpacesSunk:
-            self.searching = False
+            self.searching = False # not searching for a ship to hit
         else:
-            self.searching = True
+            self.searching = True # searching for a ship to hit
 
     def placeShip(self, ship , size):
         """Places a ship on the AdvancedComputerPlayer's ship grid.
@@ -219,7 +225,7 @@ class AdvancedComputerPlayer(Player):
         # this if-else statement is used to determine whether the game is over (meaning that the player has
         # no more turns left)
         if self.hitsA == 5 and self.hitsB == 4 and self.hitsC == 3 and self.hitsS == 3 and self.hitsD == 2: # if all
-            # the cpus ships have been sunk
+            # the cpu's ships have been sunk
             return False
         else: # if the cpu still has ships
             return True
